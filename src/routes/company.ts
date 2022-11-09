@@ -4,15 +4,16 @@ import  { Company }  from '../schema/companySchema'
 import { Request, Response } from 'express'
 import endpoint from '../../endpoints.config';
 import { Role } from '../schema/roleSchema'
-import { createRole } from "../../util"
+import { request } from 'http';
 
 
-// createRole()
 const router  = express.Router()
 router.use(json())
 
 router.post("/",async (req: Request<{}, {}>, res: Response) => {
+    
     try {
+        console.log(req)
         const {name,logo,description,address,webpage,phonenumber} = req.body
         
          const company = await Company.create({

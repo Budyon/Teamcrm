@@ -10,11 +10,9 @@ import { auth } from "../util"
 import { userRouter } from "./routes/user" 
 import { companyRouter } from "./routes/company"
 import { createRole } from '../util'
-
-// createRole()
+import { inviteRouter } from './routes/invite'
 
 const app  = express()
-const db = "mongodb://localhost:27017/teamcrm"
 
 app.use(cors())
 app.use(session({
@@ -28,6 +26,13 @@ app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
 app.use("/api/v1/user",auth,userRouter)
 app.use('/api/v1/company',auth,companyRouter)
+app.use('/api/v1/invite',auth,inviteRouter)
+
+// createRole()
+
+const db = "mongodb://localhost:27017/teamcrm"
+
+
 dotenv.config()
 
 app.listen(endpoint.PORT, () => {console.log(`Application started on port ${3004}`)})

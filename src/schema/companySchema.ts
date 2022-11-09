@@ -8,8 +8,8 @@ const CompanySchema = new mongoose.Schema({
     address:Schema.Types.String,
     webpage:Schema.Types.String,
     phonenumber:Schema.Types.Number,
+    users:Schema.Types.Array
 })
-
 
 const Company = mongoose.model("Company",CompanySchema)
 

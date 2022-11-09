@@ -4,9 +4,7 @@ import  jwt  from 'jsonwebtoken'
 import  {User}  from '../schema/userSchema'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
-import endpoint from '../../endpoints.config';
-import nodemailer from 'nodemailer';
-import * as dotenv from 'dotenv';
+import endpoint from '../../endpoints.config'
 
 const router  = express.Router()
 router.use(json())
