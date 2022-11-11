@@ -26,7 +26,7 @@ app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
 app.use("/api/v1/user",auth,userRouter)
 app.use('/api/v1/company',auth,companyRouter)
-app.use('/api/v1/invitations',auth,inviteRouter)
+app.use('/api/v1/invitations',inviteRouter)
 
 // createRole()
 
