@@ -1,9 +1,10 @@
 import mongoose, { model, Schema, Model, Document } from 'mongoose'
 
 const InviteSchema = new mongoose.Schema({
-    companyId:Schema.Types.Number,
-    userId:Schema.Types.Number,
-    active:Schema.Types.Boolean,
+    companyId:Schema.Types.ObjectId,
+    userId:Schema.Types.ObjectId,
+    roleId:Schema.Types.ObjectId,
+    active:Schema.Types.Boolean
 })
 
 

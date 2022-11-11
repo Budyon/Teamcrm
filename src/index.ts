@@ -6,10 +6,10 @@ import  session  from 'express-session'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 import endpoint from '../endpoints.config'
-import { auth } from "../util"
+import { auth } from "./util"
 import { userRouter } from "./routes/user" 
 import { companyRouter } from "./routes/company"
-import { createRole } from '../util'
+import { createRole } from './util'
 import { inviteRouter } from './routes/invite'
 
 const app  = express()
@@ -26,7 +26,7 @@ app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
 app.use("/api/v1/user",auth,userRouter)
 app.use('/api/v1/company',auth,companyRouter)
-app.use('/api/v1/invite',auth,inviteRouter)
+app.use('/api/v1/invitations',auth,inviteRouter)
 
 // createRole()
 

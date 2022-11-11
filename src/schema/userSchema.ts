@@ -5,12 +5,6 @@ const UserSchema = new mongoose.Schema({
     lastName: Schema.Types.String,
     email: Schema.Types.String,
     password: Schema.Types.String,
-    roles: [
-        {
-          type: SchemaTypes.ObjectId,
-          ref: 'Role',
-        },
-      ],
   })
 
   const User = mongoose.model("User",UserSchema)

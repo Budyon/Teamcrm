@@ -3,7 +3,7 @@ import { json } from 'body-parser'
 import  { User }  from '../schema/userSchema'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
-import { generateAccessToken } from '../../util'
+import { generateAccessToken } from '../util'
 
 const router  = express.Router()
 

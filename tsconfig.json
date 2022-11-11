@@ -8,17 +8,17 @@
     "preserveConstEnums": true,
     "strict": true,
     "esModuleInterop": true,
-    "typeRoots" : ["src/src/types", "./node_modules/@types"],
+    "typeRoots" : ["src/types"],
     "outDir": "./dist",
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
       "*":[
-        "node_modules/",
-        "src/src/types/*"
+        "src/types/*"
       ]
     },
   },
+  "files": ["src/types/index.d.ts"],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

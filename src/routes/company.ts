@@ -6,16 +6,13 @@ import endpoint from '../../endpoints.config';
 import { Role } from '../schema/roleSchema'
 import { request } from 'http';
 
-
 const router  = express.Router()
 router.use(json())
 
-router.post("/",async (req: Request<{}, {}>, res: Response) => {
+router.post("/",async (req: Request, res: Response) => {
     
     try {
-        console.log(req)
-        const {name,logo,description,address,webpage,phonenumber} = req.body
-        
+        const { name,logo,description,address,webpage,phonenumber } = req.body
          const company = await Company.create({
             name,
             logo,
@@ -24,10 +21,21 @@ router.post("/",async (req: Request<{}, {}>, res: Response) => {
             webpage,
             phonenumber
         })
-                
-        if(company) {
-            res.json(company)
-        }
+        console.log(req.token.user_id)
+        console.log(req.token)
+        
+        
+        const role = await Role.findOne({name:'Company owner'})
+        
+        company.users.push({
+            user:req.token.user_id,
+            role:role?._id
+        })
+
+        await company.save()
+        
+        res.json(company)
+
     } catch (error) {
         console.log(error)
     }
