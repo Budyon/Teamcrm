@@ -10,7 +10,7 @@ const userCompany = new mongoose.Schema({
 const CompanySchema = new mongoose.Schema({
     name:Schema.Types.String,
     owner_id:Schema.Types.String,
-    logo:Schema.Types.Buffer,
+    logo:Schema.Types.String,
     description:Schema.Types.String,
     address:Schema.Types.String,
     webpage:Schema.Types.String,

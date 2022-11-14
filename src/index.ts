@@ -32,7 +32,6 @@ app.use('/api/v1/invitations',inviteRouter)
 
 const db = "mongodb://localhost:27017/teamcrm"
 
-
 dotenv.config()
 
 app.listen(endpoint.PORT, () => {console.log(`Application started on port ${3004}`)})

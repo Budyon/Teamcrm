@@ -9,11 +9,5 @@ import endpoint from '../../endpoints.config'
 const router  = express.Router()
 router.use(json())
 
-router.post("/aaa",(req:Request,res:Response)=>{
-    res.json({
-        asas:"asas"
-    })
-})
-
 
 export { router as userRouter}

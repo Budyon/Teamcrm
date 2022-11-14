@@ -12,7 +12,7 @@ router.use(json())
 router.post('/register', async (req: Request<{}, {}>, res: Response) => {
     
   try {
-    const { firstName, lastName, email, password } = req.body
+    const { firstName, lastName, email, password, photo } = req.body
                   
     if (!(email && password && firstName && lastName)) {
       res.status(400).send("All input is required")
@@ -29,6 +29,8 @@ router.post('/register', async (req: Request<{}, {}>, res: Response) => {
     const user = await User.create({
       firstName,
       lastName,
+      photo,
+      role:undefined,
       email: email.toLowerCase(), 
       password: encryptedPassword,
     })
