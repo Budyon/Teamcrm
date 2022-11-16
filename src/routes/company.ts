@@ -4,11 +4,12 @@ import  { Company }  from '../schema/companySchema'
 import { Request, Response } from 'express'
 import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema' 
+import { projectRouter } from './project'
 
 const router  = express.Router()
 
 router.use(json())
-
+router.use('/:companyId/projects',projectRouter)
 router.post("/",async (req: Request, res: Response) => {
                        
     try {
@@ -40,7 +41,6 @@ router.post("/",async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error)
     }
-    
 }) 
 
 export { router as companyRouter}

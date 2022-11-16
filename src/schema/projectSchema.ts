@@ -1,18 +1,12 @@
 import mongoose, { model, Schema, Model, Document, mongo } from 'mongoose'
 import { User } from './userSchema'
 
-
-const projectCompany = new mongoose.Schema({
-    user_owner: { type: Schema.Types.ObjectId, ref:'User'},
-    project: { type: Schema.Types.ObjectId, ref:'Project'},
-})
-
-const userCompany = new mongoose.Schema({
+const userProject = new mongoose.Schema({
     user: { type: Schema.Types.ObjectId, ref:'User'},
     role: { type: Schema.Types.ObjectId, ref:'Role'},
 })
 
-const CompanySchema = new mongoose.Schema({
+const ProjectSchema = new mongoose.Schema({
     name:Schema.Types.String,
     owner_id:Schema.Types.String,
     logo:Schema.Types.String,
@@ -20,10 +14,13 @@ const CompanySchema = new mongoose.Schema({
     address:Schema.Types.String,
     webpage:Schema.Types.String,
     phonenumber:Schema.Types.Number,
-    users: [ { type:userCompany } ],
-    projects:[ { type:projectCompany } ]
+    users: [ { type:userProject } ],
+    companyId:Schema.Types.ObjectId
 })
 
-const Company = mongoose.model("Company",CompanySchema)
+const Project = mongoose.model("Project",ProjectSchema)
 
-export { Company }
+export { Project }
+
+
+

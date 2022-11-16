@@ -11,6 +11,7 @@ import { userRouter } from "./routes/user"
 import { companyRouter } from "./routes/company"
 import { createRole } from './util'
 import { inviteRouter } from './routes/invite'
+import { projectRouter } from './routes/project' 
 
 const app  = express()
 
@@ -21,12 +22,12 @@ app.use(session({
   saveUninitialized: false
 }))
 app.use(json())
-
 app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
 app.use("/api/v1/user",auth,userRouter)
-app.use('/api/v1/company',auth,companyRouter)
+app.use('/api/v1/companies',auth,companyRouter)
 app.use('/api/v1/invitations',inviteRouter)
+
 
 // createRole()
 
@@ -38,4 +39,3 @@ app.listen(endpoint.PORT, () => {console.log(`Application started on port ${3004
 mongoose.connect(db).then(() => console.log('connected to db..')).catch((err:any)=>{
   console.log(err + 'error')
 })
-    
