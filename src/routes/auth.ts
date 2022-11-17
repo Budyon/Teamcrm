@@ -35,7 +35,7 @@ router.post('/register', async (req: Request<{}, {}>, res: Response) => {
       password: encryptedPassword,
     })
     
-    res.status(201).send(user)
+    res.status(201).json(user)
   } catch (err) {
     console.log(err)
   }

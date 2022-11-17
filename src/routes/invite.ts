@@ -13,15 +13,20 @@ router.use(json())
 
 router.get('/:id',async(req:Request,res:Response) => {
     try {
+        
+        
         const invite = await Invite.findById(req.params.id)
         if(invite?.active === true) {
-
             const company = await Company.findById(invite.companyId)
 
             company?.users.push({
                 user:invite.userId,
                 role:invite.roleId
             })
+            await User.findByIdAndUpdate(invite.userId,{
+                role:invite.roleId
+            })
+
             await company?.save()
 
             invite.active = false
@@ -81,7 +86,6 @@ router.post('/', auth, async(req:Request,res:Response) => {
     } catch (error) {
         console.log(error)
     }
-     
 })
  
 export { router as inviteRouter }
