@@ -23,7 +23,8 @@ router.post('/', async (req:Request,res:Response) => {
                 description,
                 address,
                 webpage,
-                phonenumber
+                phonenumber,
+                companyId:req.params.companyId
             })
             company?.projects.push({
                 user_owner:req.token.user_id,
@@ -46,8 +47,7 @@ router.post('/', async (req:Request,res:Response) => {
     } catch (error) {
         console.log(error)
     }
-    
 })
 
 export { router as projectRouter }
- 
+   

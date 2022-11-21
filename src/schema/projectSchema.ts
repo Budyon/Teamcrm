@@ -4,6 +4,7 @@ import { User } from './userSchema'
 const userProject = new mongoose.Schema({
     user: { type: Schema.Types.ObjectId, ref:'User'},
     role: { type: Schema.Types.ObjectId, ref:'Role'},
+    contractDate:Schema.Types.Date
 })
 
 const ProjectSchema = new mongoose.Schema({
