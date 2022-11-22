@@ -125,10 +125,12 @@ router.post('/company', auth, async(req:Request,res:Response) => {
 
 router.post('/project', auth, async(req:Request,res:Response) => {
     try {
+        
         const { projectId,userId,roleId,contractDate } = req.body
         const project = await Project.findById(projectId)
         const user  = await User.findById(userId)
         const boolean = project?.users.toString().includes(userId)
+        if(contractDate > new Date)
             if(project !== null) {
                 if(!boolean){
                     const invite = await inviteProject.create({
@@ -159,7 +161,7 @@ router.post('/project', auth, async(req:Request,res:Response) => {
             } else {
                 res.json({
                     error:" Dont get Project "
-                })    
+                })   
             }                   
         
     } catch (error) {
