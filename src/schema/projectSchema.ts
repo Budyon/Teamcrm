@@ -1,5 +1,5 @@
 import mongoose, { model, Schema, Model, Document, mongo } from 'mongoose'
-import { User } from './userSchema'
+import { assign } from 'nodemailer/lib/shared'
 
 const userProject = new mongoose.Schema({
     user: { type: Schema.Types.ObjectId, ref:'User'},
@@ -8,13 +8,13 @@ const userProject = new mongoose.Schema({
 })
 
 const taskProject = new mongoose.Schema({
-    taskName:Schema.Types.String,
-    description:Schema.Types.String,
-    photo:Schema.Types.String,
-    setPriority:Schema.Types.String,
-    dueData:Schema.Types.String,
-    assignMembers:Schema.Types.String,
-    creator:Schema.Types.ObjectId
+    taskName: Schema.Types.String,
+    description: Schema.Types.String,
+    photo: Schema.Types.String,
+    setPriority: Schema.Types.String,
+    dueData: Schema.Types.Date,
+    assignMember: Schema.Types.ObjectId,
+    creator: Schema.Types.ObjectId
 })
 
 const ProjectSchema = new mongoose.Schema({

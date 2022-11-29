@@ -5,6 +5,7 @@ import { Request, Response } from 'express'
 import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema' 
 import { Company } from '../schema/companySchema'
+import { assign } from 'nodemailer/lib/shared'
 
 const router  = express.Router({ mergeParams: true })
 
@@ -45,6 +46,28 @@ router.post('/', async (req:Request,res:Response) => {
     }
     
     } catch (error) {
+        console.log(error)
+    }
+})
+   
+router.post('/:id/task', async (req:Request,res:Response) => {
+    try {
+            const { taskName,description,photo,setPriority,dueData,assignMember } = req.body
+            const project = await Project.findById(req.params.id)
+            
+            project?.tasks.push({
+                taskName,
+                description,
+                photo,
+                setPriority,
+                dueData,
+                assignMember,
+                creator:req.token.user_id
+            })
+
+        await project?.save()
+    }
+    catch (error) {
         console.log(error)
     }
 })
