@@ -28,7 +28,6 @@ app.use("/api/v1/user",auth,userRouter)
 app.use('/api/v1/companies',auth,companyRouter)
 app.use('/api/v1/invitations',inviteRouter)
 
-
 // createRole()
 
 const db = "mongodb://localhost:27017/teamcrm"

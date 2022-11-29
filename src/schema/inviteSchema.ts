@@ -15,9 +15,7 @@ const InviteSchemaProject = new mongoose.Schema({
     active:Schema.Types.Boolean
 })
 
-
 const inviteCompany = mongoose.model("InviteCompany",InviteSchemaCompany)
 const inviteProject = mongoose.model("InviteProject",InviteSchemaProject)
-
 
 export { inviteCompany,inviteProject }
