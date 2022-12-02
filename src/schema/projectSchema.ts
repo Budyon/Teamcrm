@@ -8,6 +8,8 @@ const userProject = new mongoose.Schema({
 })
 
 const taskProject = new mongoose.Schema({
+    type: Schema.Types.String,
+    task: Schema.Types.String,
     taskName: Schema.Types.String,
     description: Schema.Types.String,
     photo: Schema.Types.String,
