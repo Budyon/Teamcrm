@@ -20,13 +20,13 @@ const taskProject = new mongoose.Schema({
 })
 
 const ProjectSchema = new mongoose.Schema({
-    name:Schema.Types.String,
-    owner_id:Schema.Types.String,
-    logo:Schema.Types.String,
-    description:Schema.Types.String,
-    address:Schema.Types.String,
-    webpage:Schema.Types.String,
-    phonenumber:Schema.Types.Number,
+    name:{ type: String, required: true,  },
+    owner_id:{ type: String, required: true,  },
+    logo:{ type: String, required: true,  },
+    description:{ type: String, required: true,  },
+    address:{ type: String, required: true,  },
+    webpage:{ type: String, required: true,  },
+    phonenumber:{ type: Number, required: true,  },
     users: [ { type:userProject } ],
     tasks: [ { type:taskProject } ],
     companyId:Schema.Types.ObjectId

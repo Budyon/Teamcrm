@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import express from 'express'
-import { json } from "body-parser"
+import { urlencoded,json } from "body-parser"
 import { AuthRouter } from "./routes/auth"
 import  session  from 'express-session'
 import cors from 'cors'
@@ -22,11 +22,12 @@ app.use(session({
   saveUninitialized: false
 }))
 app.use(json())
+app.use(urlencoded({ extended: true }))
 app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
 app.use("/api/v1/user",auth,userRouter)
 app.use('/api/v1/companies',auth,companyRouter)
-app.use('/api/v1/invitations',inviteRouter)
+app.use('/api/v1/invitations',auth,inviteRouter)
 
 // createRole()
 

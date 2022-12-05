@@ -1,6 +1,5 @@
-import express, { response } from 'express'
-import { json } from 'body-parser'
-import  { Project }  from '../schema/projectSchema'
+import express from 'express'
+import { Project }  from '../schema/projectSchema'
 import { Request, Response } from 'express'
 import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema' 
@@ -8,34 +7,36 @@ import { Company } from '../schema/companySchema'
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import path  from 'path'
+
 const router  = express.Router({ mergeParams: true })
 
-router.use(json())
-
-const userStorage = multer.diskStorage({   
+const projectStorage = multer.diskStorage({
     destination: function(req, file, cb) {
-       cb(null, path.resolve('./src/storage/project')) 
-    }, 
+       cb(null, path.resolve('./src/storage/proect')) 
+    },
     filename: function (req, file, cb) {
         const type = file.originalname.split(".")
         cb(null, uuidv4() + "." + type[1])
     }
 })
 const upload = multer({
-    storage: userStorage,
+    storage: projectStorage,
     limits : {fileSize : 1000000}
 })
 
-router.post('/',upload.single('photo'), async (req:Request,res:Response) => {
+router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
     try {
         const company = await Company.findById(req.params.companyId)
         const role = await Role.findOne({name:'Project manager'})
         const user = await User.findById(req.token.user_id)
         if(role?.id === user?.role?.toString()) {
-            const { name,logo,description,address,webpage,phonenumber } = req.body
+            const { name, owner_id, description, address, webpage, phonenumber } = req.body
+            
+            
             const project = await Project.create({
                 name,
-                logo,
+                logo:req.file?.path,
+                owner_id,
                 description,
                 address,
                 webpage,
@@ -65,7 +66,7 @@ router.post('/',upload.single('photo'), async (req:Request,res:Response) => {
     }
 })
 
-router.put('/',upload.single('photo'), async (req:Request,res:Response) => {
+router.put('/', async (req:Request,res:Response) => {
     try {
         const role = await Role.findOne({name:'Project manager'})
         const user = await User.findById(req.token.user_id)

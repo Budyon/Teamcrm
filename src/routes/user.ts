@@ -1,19 +1,13 @@
 import express from 'express'
-import { json } from 'body-parser'
 import  {User}  from '../schema/userSchema'
 import { Request, Response } from 'express'
 import { body,validationResult } from 'express-validator'
-import bodyParser from 'body-parser'
 
 const router  = express.Router()
-
-router.use(json())
-router.use(bodyParser.urlencoded({ extended: true }))
 
 router.put("/",
 body('firstName').isString(),
 body('lastName').isString(),
-
 body('email').isEmail(),
 body('password').isString(),
 async (req:Request, res:Response) => {
