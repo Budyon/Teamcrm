@@ -12,7 +12,7 @@ const router  = express.Router({ mergeParams: true })
 
 const projectStorage = multer.diskStorage({
     destination: function(req, file, cb) {
-       cb(null, path.resolve('./src/storage/proect')) 
+       cb(null, path.resolve('./src/storage/project')) 
     },
     filename: function (req, file, cb) {
         const type = file.originalname.split(".")
