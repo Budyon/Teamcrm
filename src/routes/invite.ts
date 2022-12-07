@@ -23,36 +23,34 @@ let transporter = nodemailer.createTransport({
   })
 
 router.get('/company/:id',async(req:Request,res:Response) => {
-    
     try {
-        
         const invitecompany = await inviteCompany.findById(req.params.id)
-        if(invitecompany?.active === true) {
-            const company = await Company.findById(invitecompany.companyId)
+            if(invitecompany?.active === true) {
+                const company = await Company.findById(invitecompany.companyId)
 
-            company?.users.push({
-                user:invitecompany.userId,
-                role:invitecompany.roleId
-            })
-            await User.findByIdAndUpdate(invitecompany.userId,{
-                role:invitecompany.roleId
-            })
+                company?.users.push({
+                    user:invitecompany.userId,
+                    role:invitecompany.roleId
+                })
+                await User.findByIdAndUpdate(invitecompany.userId,{
+                    role:invitecompany.roleId
+                })
 
-            await company?.save()
+                await company?.save()
 
-            invitecompany.active = false
-            await invitecompany.save()
+                invitecompany.active = false
+                await invitecompany.save()
 
-            res.json({
-                Success:"You are already in our company"
-            })
-        }else {
-            res.json({
-                error:"The invitation has already expired"
-            })
-        }
+                res.json({
+                    Success:"You are already in our company"
+                })
+            }else {
+                res.json({
+                    error:"The invitation has already expired"
+                })
+            }
     } catch (error) {
-        console.log(error)
+        res.json(error)
     }
 })
 
@@ -60,32 +58,33 @@ router.get('/project/:id',async(req:Request,res:Response) => {
     
     try {
         const inviteprojects = await inviteProject.findById(req.params.id)
-        if(inviteprojects?.active === true) {
-            const project = await Project.findById(inviteprojects?.projectId)
 
-            project?.users.push({
-                user:inviteprojects.userId,
-                contractDate:inviteprojects.contractDate
-            })
-            await User.findByIdAndUpdate(inviteprojects.userId,{
-                role:inviteprojects.roleId
-            })
+            if(inviteprojects?.active === true) {
+                const project = await Project.findById(inviteprojects?.projectId)
 
-            await project?.save()
+                project?.users.push({
+                    user:inviteprojects.userId,
+                    contractDate:inviteprojects.contractDate
+                })
+                await User.findByIdAndUpdate(inviteprojects.userId,{
+                    role:inviteprojects.roleId
+                })
 
-            inviteprojects.active = false
-            await inviteprojects.save()
+                await project?.save()
 
-            res.json({
-                Success:"You are already in our project"
-            })
-        }else {
-            res.json({
-                error:"The invitation has already expired"
-            })
-        }
+                inviteprojects.active = false
+                await inviteprojects.save()
+
+                res.json({
+                    Success:"You are already in our project"
+                })
+            }else {
+                res.json({
+                    error:"The invitation has already expired"
+                })
+            }
     } catch (error) {
-        console.log(error)
+        res.json(error)
     }
 })
 
@@ -130,9 +129,10 @@ router.post('/project', auth, async(req:Request,res:Response) => {
         const project = await Project.findById(projectId)
         const user  = await User.findById(userId)
         const boolean = project?.users.toString().includes(userId)
+
         if(contractDate > new Date)
             if(project !== null) {
-                if(!boolean){
+                if(!boolean) {
                     const invite = await inviteProject.create({
                         projectId,
                         userId,
@@ -159,13 +159,13 @@ router.post('/project', auth, async(req:Request,res:Response) => {
                 }
                 
             } else {
-                res.json({
+                res.status(403).json({
                     error:" Dont get Project "
                 })   
             }                   
         
     } catch (error) {
-        console.log(error)
+        res.status(404).json(error)
     }
 })
  

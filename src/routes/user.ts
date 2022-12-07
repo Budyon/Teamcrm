@@ -17,7 +17,7 @@ async (req:Request, res:Response) => {
         console.log(req.files)
         
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ errors: errors.array() })
         }
         const user = await User.findByIdAndUpdate(req.token.user_id, {
             firstName,

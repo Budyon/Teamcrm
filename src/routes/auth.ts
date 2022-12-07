@@ -21,10 +21,8 @@ router.post('/register',upload.single('photo'),
     if (oldUser) {
       return res.status(409).json("Email Already Exist. Please Login")
     }
-    console.log(req.file?.path.slice(7))
     
     const encryptedPassword = await bcrypt.hash(password, 10)
-    console.log(req.file)
     const user = await User.create({
       firstname,
       lastname,
@@ -53,8 +51,10 @@ router.post('/login', async(req: Request, res: Response) => {
           if(err) {
             console.log(err)
           }
+
           if(result) {            
               const token = generateAccessToken({user_id: user.id})
+              
               res.json({
                   user,
                   token,
@@ -67,13 +67,8 @@ router.post('/login', async(req: Request, res: Response) => {
       })       
     } 
   } catch (error) {
-    console.log(error, 'error')
-    
     res.status(401).json(error)
   }
 })
-
-
-
 
 export { router as AuthRouter}

@@ -4,39 +4,22 @@ import { Request, Response } from 'express'
 import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema' 
 import { Company } from '../schema/companySchema'
-import multer from 'multer'
-import { v4 as uuidv4 } from 'uuid'
-import path  from 'path'
+import { upload } from '../util'
 
 const router  = express.Router({ mergeParams: true })
 
-const projectStorage = multer.diskStorage({
-    destination: function(req, file, cb) {
-       cb(null, path.resolve('./src/storage/project')) 
-    },
-    filename: function (req, file, cb) {
-        const type = file.originalname.split(".")
-        cb(null, uuidv4() + "." + type[1])
-    }
-})
-const upload = multer({
-    storage: projectStorage,
-    limits : {fileSize : 1000000}
-})
-
 router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
     try {
+        
         const company = await Company.findById(req.params.companyId)
         const role = await Role.findOne({name:'Project manager'})
         const user = await User.findById(req.token.user_id)
         if(role?.id === user?.role?.toString()) {
-            const { name, owner_id, description, address, webpage, phonenumber } = req.body
-            
-            
+            const { name, description, address, webpage, phonenumber } = req.body
             const project = await Project.create({
                 name,
                 logo:req.file?.path,
-                owner_id,
+                owner_id:req.token.user_id,
                 description,
                 address,
                 webpage,

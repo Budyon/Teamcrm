@@ -7,9 +7,13 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import multer from 'multer'
 
-export const userStorage = multer.diskStorage({   
+export const Storage = multer.diskStorage({   
   destination: function(req, file, cb) {
-     cb(null, path.resolve('./src/storage/user'))
+    if(req.url === '/register') {
+      cb(null, path.resolve('./src/storage/user'))
+    }else {
+      cb(null, path.resolve('./src/storage/project'))
+    }
   },
   filename: function (req, file, cb) {
       const type = file.originalname.split(".")
@@ -18,8 +22,8 @@ export const userStorage = multer.diskStorage({
 })
 
 export const upload = multer({
-  storage: userStorage,
-  limits : {fileSize : 1000000}
+  storage: Storage,
+  limits : { fileSize : 1000000 }
 })
 
 export  function createRole()  {
