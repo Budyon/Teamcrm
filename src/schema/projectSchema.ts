@@ -4,7 +4,7 @@ import { assign } from 'nodemailer/lib/shared'
 const userProject = new mongoose.Schema({
     user: { type: Schema.Types.ObjectId, ref:'User'},
     role: { type: Schema.Types.ObjectId, ref:'Role'},
-    contractDate:Schema.Types.Date
+    contractDate:{ type:Schema.Types.Date }
 })
 
 const taskProject = new mongoose.Schema({
@@ -20,15 +20,16 @@ const taskProject = new mongoose.Schema({
 })
 
 const ProjectSchema = new mongoose.Schema({
-    name:{ type: String, required: true,  },
-    owner_id:{ type: String, required: true,  },
-    logo:{ type: String, required: true,  },
-    description:{ type: String, required: true,  },
-    address:{ type: String, required: true,  },
-    webpage:{ type: String, required: true,  },
-    phonenumber:{ type: Number, required: true,  },
+    name:{ type: String, required: true  },
+    owner_id:{ type: String, required: true },
+    logo:{ type: String, required: true  },
+    description:{ type: String, required: true, },
+    address:{ type: String, required: true  },
+    webpage:{ type: String, required: true  },
+    phonenumber:{ type: Number, required: true  },
     users: [ { type:userProject } ],
     tasks: [ { type:taskProject } ],
+    subtask: [ { type:taskProject } ],
     companyId:Schema.Types.ObjectId
 })
 
