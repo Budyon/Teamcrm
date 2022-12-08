@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import { generateAccessToken } from '../util'
 import { upload } from '../util'
+import  jwt, { sign, verify } from 'jsonwebtoken' 
+import endpoint from '../endpoints.config'
 
 const router  = express.Router()
 
@@ -15,7 +17,7 @@ router.post('/register',upload.single('photo'),
     const oldUser = await User.findOne({ email })
                 
     if (!(email && password && firstname && lastname)) {
-      res.status(400).send("All input is required")
+      res.status(400).json({error:"All input is required"})
     }
 
     if (oldUser) {
@@ -30,14 +32,19 @@ router.post('/register',upload.single('photo'),
       email: email.toLowerCase(),
       password: encryptedPassword,
     })
-    
-    res.status(201).json(user)
+    const token = generateAccessToken({user_id: user.id})
+              
+    res.status(201).json({
+      user,
+      token
+    })
   } catch (err) {
     console.log(err)
   }
 })
 
 router.post('/login', async(req: Request, res: Response) => {
+
   try {
       const { email, password } = req.body
   
@@ -53,11 +60,23 @@ router.post('/login', async(req: Request, res: Response) => {
           }
 
           if(result) {            
-              const token = generateAccessToken({user_id: user.id})
+              const accessToken = generateAccessToken({user_id: user.id})
+              const refreshToken = jwt.sign({
+                user_id: user.id,
+            }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+
+            res.cookie('jwt', refreshToken, {
+              httpOnly: true, 
+              sameSite: 'none',
+              secure: true, 
+              maxAge: 24 * 60 * 60 * 1000,
+            });
+  
               
               res.json({
                   user,
-                  token,
+                  accessToken,
+                  refreshToken
               })
           }else {
             res.json({
@@ -70,5 +89,17 @@ router.post('/login', async(req: Request, res: Response) => {
     res.status(401).json(error)
   }
 })
+
+// router.get("/logout",(req,res)=>{
+//   const authHeader = req.headers["authorization"]
+//   sign(authHeader,  { expiresIn: 1 } , (logout:Boolean, err) => {
+//       if (logout) {
+//         res.json({message : 'You have been Logged Out' })
+//       }
+//       if(err) {
+//           res.json({message:'Error'})
+//       }
+//   })
+// })
 
 export { router as AuthRouter}

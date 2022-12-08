@@ -1,7 +1,7 @@
 import { Secret, JwtPayload, } from 'jsonwebtoken'
 import { sign,verify } from "jsonwebtoken"
 import { Request, Response, NextFunction } from 'express'
-import endpoint from '../endpoints.config'
+import endpoint from './endpoints.config'
 import { Role } from './schema/roleSchema'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
@@ -39,7 +39,7 @@ export function generateAccessToken(user:any) {
     return sign(
       user,
       endpoint.ACCESS_TOKEN_SECRET,
-      {  expiresIn: '24h' }
+      {  expiresIn: '1m' }
     )
 }
 
