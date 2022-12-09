@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import { generateAccessToken } from '../util'
 import { upload } from '../util'
-import  jwt, { sign, verify } from 'jsonwebtoken' 
+import  jwt from 'jsonwebtoken' 
 import endpoint from '../endpoints.config'
 
 const router  = express.Router()
@@ -32,11 +32,21 @@ router.post('/register',upload.single('photo'),
       email: email.toLowerCase(),
       password: encryptedPassword,
     })
-    const token = generateAccessToken({user_id: user.id})
-              
+    const accessToken = generateAccessToken({user_id: user.id})
+    const refreshToken = jwt.sign({
+      user_id: user.id,
+  }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+
+  res.cookie('jwt', refreshToken, {
+    httpOnly: true, 
+    sameSite: 'none',
+    secure: true, 
+    maxAge: 24 * 60 * 60 * 1000,
+  })
     res.status(201).json({
       user,
-      token
+      accessToken,
+      refreshToken
     })
   } catch (err) {
     console.log(err)
@@ -70,7 +80,7 @@ router.post('/login', async(req: Request, res: Response) => {
               sameSite: 'none',
               secure: true, 
               maxAge: 24 * 60 * 60 * 1000,
-            });
+            })
   
               
               res.json({
@@ -87,6 +97,26 @@ router.post('/login', async(req: Request, res: Response) => {
     } 
   } catch (error) {
     res.status(401).json(error)
+  }
+})
+
+router.post('/refresh', (req, res) => {
+  const refreshToken = req.headers?.jwt
+
+  if (refreshToken && typeof refreshToken === 'string') {
+      
+      jwt.verify(refreshToken, endpoint.REFRESH_TOKEN_SECRET, 
+      (err:any, decoded:any) => {
+          if (err) {
+              return res.status(406).json({ message: 'Unauthorized' })
+          }
+          else {
+              const accessToken = generateAccessToken({ user_id: decoded.user_id })
+              return res.json({ accessToken })
+          }
+      })
+  } else {
+      return res.status(406).json({ message: 'Unauthorized' });
   }
 })
 

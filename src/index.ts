@@ -28,9 +28,6 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(cookieParser());
 
-console.log(cookieParser());
-
-
 app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
 app.use("/api/v1/user",auth,userRouter)
@@ -43,27 +40,7 @@ const db = "mongodb://localhost:27017/teamcrm"
 
 dotenv.config()
 
-app.post('/refresh', (req, res) => {
-  const refreshToken = req.headers?.jwt
 
-  if (refreshToken && typeof refreshToken === 'string') {
-      
-      jwt.verify(refreshToken, endpoint.REFRESH_TOKEN_SECRET, 
-      (err:any, decoded:any) => {
-          if (err) {
-
-              return res.status(406).json({ message: 'Unauthorized' })
-          }
-          else {
-              // Correct token we send a new access token
-              const accessToken = generateAccessToken({ user_id: decoded.user_id })
-              return res.json({ accessToken })
-          }
-      })
-  } else {
-      return res.status(406).json({ message: 'Unauthorized' });
-  }
-})
 
 app.listen(endpoint.PORT, () => {console.log(`Application started on port ${3004}`)})
 mongoose.connect(db).then(() => console.log('connected to db..')).catch((err:any)=>{
