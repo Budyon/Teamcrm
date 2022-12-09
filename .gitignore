@@ -1,2 +1,5 @@
 node_modules
-src/storage
+src/storage/project/
+src/storage/user/
+.env
+dist/
