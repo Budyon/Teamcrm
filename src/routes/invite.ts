@@ -103,7 +103,7 @@ router.post('/company', auth, async(req:Request,res:Response) => {
         const company = await Company.findById(companyId)
     
         const output = `<h1>Hi, we invite you to our company as a ${role?.name}, if you accept the offer, click the link below</h1>
-        <a href="${`http://localhost:3004/api/v1/invitations/company${invite._id}`}">Click here</a>`
+        <a href="${`http://localhost:3004/api/v1/invitations/company/${invite._id}`}">Click here</a>`
             
           await transporter.sendMail({
             from: user?.email,
