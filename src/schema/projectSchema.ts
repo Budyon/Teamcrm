@@ -8,13 +8,11 @@ const userProject = new mongoose.Schema({
 })
 
 const taskProject = new mongoose.Schema({
-    type: Schema.Types.String,
-    task: Schema.Types.String,
-    taskName: Schema.Types.String,
-    description: Schema.Types.String,
-    photo: Schema.Types.String,
-    setPriority: Schema.Types.String,
-    dueData: Schema.Types.Date,
+    taskName: { type: String, required: true },
+    description: { type: String, required: true },
+    photo: { type: String, required: true },
+    setPriority: { type: String, required: true },
+    dueData: { type: Date, required: true },
     assignMember: Schema.Types.ObjectId,
     creator: Schema.Types.ObjectId
 })

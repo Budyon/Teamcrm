@@ -13,11 +13,11 @@ import { createRole } from './util'
 import { inviteRouter } from './routes/invite'
 import { projectRouter } from './routes/project' 
 import jwt from 'jsonwebtoken'
-import cookieParser from 'cookie-parser';
-
+import cookieParser from 'cookie-parser'
+import { upload } from './util'
 import { generateAccessToken } from './util'
-const app  = express()
 
+const app  = express()
 app.use(cors())
 app.use(session({
   secret: endpoint.SESSION_SECRET,
@@ -39,8 +39,6 @@ app.use('/api/v1/invitations',auth,inviteRouter)
 const db = "mongodb://localhost:27017/teamcrm"
 
 dotenv.config()
-
-
 
 app.listen(endpoint.PORT, () => {console.log(`Application started on port ${3004}`)})
 mongoose.connect(db).then(() => console.log('connected to db..')).catch((err:any)=>{

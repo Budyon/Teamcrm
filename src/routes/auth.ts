@@ -66,7 +66,7 @@ router.post('/login', async(req: Request, res: Response) => {
       if(user) {
         bcrypt.compare(password, user.password, function(err, result) {
           if(err) {
-            console.log(err)
+            res.status(400).json(err)
           }
 
           if(result) {            
@@ -76,12 +76,11 @@ router.post('/login', async(req: Request, res: Response) => {
             }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
 
             res.cookie('jwt', refreshToken, {
-              httpOnly: true, 
+              httpOnly: true,
               sameSite: 'none',
               secure: true, 
-              maxAge: 24 * 60 * 60 * 1000,
+              maxAge: 24 * 60 * 60 * 1000
             })
-  
               
               res.json({
                   user,
@@ -93,8 +92,12 @@ router.post('/login', async(req: Request, res: Response) => {
               error:"Invalid password"
             })
           }
-      })       
-    } 
+        })       
+      }else {
+        res.status(401).json({
+          err:'User not found '
+        })
+      } 
   } catch (error) {
     res.status(401).json(error)
   }
@@ -105,7 +108,7 @@ router.post('/refresh', (req, res) => {
 
   if (refreshToken && typeof refreshToken === 'string') {
       
-      jwt.verify(refreshToken, endpoint.REFRESH_TOKEN_SECRET, 
+      jwt.verify(refreshToken, endpoint.REFRESH_TOKEN_SECRET,
       (err:any, decoded:any) => {
           if (err) {
               return res.status(406).json({ message: 'Unauthorized' })

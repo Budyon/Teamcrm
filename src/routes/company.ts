@@ -5,18 +5,20 @@ import { Request, Response } from 'express'
 import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema' 
 import { projectRouter } from './project'
+import { upload } from '../util'
 
 const router  = express.Router()
 
 router.use(json())
 router.use('/:companyId/projects',projectRouter)
-router.post("/",async (req: Request, res: Response) => {
+router.post("/",upload.single("logo"), async (req: Request, res: Response) => {
                        
     try {
-        const { name,logo,description,address,webpage,phonenumber } = req.body
+        const { name,description,address,webpage,phonenumber } = req.body
          const company = await Company.create({
             name,
-            logo,
+            logo:req.file?.path,
+            owner_id:req.token.user_id,
             description,
             address,
             webpage,

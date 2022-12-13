@@ -1,5 +1,5 @@
 import { Secret, JwtPayload, } from 'jsonwebtoken'
-import { sign,verify } from "jsonwebtoken"
+import { sign,verify } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import endpoint from './endpoints.config'
 import { Role } from './schema/roleSchema'
@@ -7,7 +7,7 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import multer from 'multer'
 
-export const Storage = multer.diskStorage({   
+export const Storage = multer.diskStorage({
   destination: function(req, file, cb) {
     if(req.url === '/register') {
       cb(null, path.resolve('./src/storage/user'))
@@ -17,7 +17,7 @@ export const Storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
       const type = file.originalname.split(".")
-      cb(null, uuidv4() + "." + type[1])
+      cb(null, `${uuidv4()}.${type[1]}`)
   }
 })
 
@@ -39,15 +39,15 @@ export function generateAccessToken(user:any) {
     return sign(
       user,
       endpoint.ACCESS_TOKEN_SECRET,
-      {  expiresIn: '1m' }
+      {  expiresIn: '5m' }
     )
 }
 
 export const SECRET_KEY: Secret = endpoint.ACCESS_TOKEN_SECRET
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
-  
  try {
+
    const token = req.header('Authorization')?.replace('Bearer ', '')
 
    if (!token) {
