@@ -36,31 +36,27 @@ export  function createRole()  {
 }
 
 export function generateAccessToken(user:any) {
-    return sign(
-      user,
-      endpoint.ACCESS_TOKEN_SECRET,
-      {  expiresIn: '5m' }
+  
+    return sign(user, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '15m' }
     )
 }
-
-export const SECRET_KEY: Secret = endpoint.ACCESS_TOKEN_SECRET
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
  try {
 
    const token = req.header('Authorization')?.replace('Bearer ', '')
-
+  
    if (!token) {
      throw new Error()
    }
    
-   const decoded = verify(token, SECRET_KEY)
- 
+   const decoded = verify(token, endpoint.ACCESS_TOKEN_SECRET)
+   
    req.token = decoded as JwtPayload
-
+   
    next()
  } catch (err) {
-    res.status(401).send('Please authenticate')
+    res.status(401).json({error:'Please authenticate'})
   }
 }
 

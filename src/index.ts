@@ -9,15 +9,12 @@ import endpoint from './endpoints.config'
 import { auth } from "./util"
 import { userRouter } from "./routes/user" 
 import { companyRouter } from "./routes/company"
-import { createRole } from './util'
 import { inviteRouter } from './routes/invite'
-import { projectRouter } from './routes/project' 
-import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
-import { upload } from './util'
-import { generateAccessToken } from './util'
-
+import bodyParser from 'body-parser'
+import {User} from './schema/userSchema'
 const app  = express()
+app.use(bodyParser.json());
 app.use(cors())
 app.use(session({
   secret: endpoint.SESSION_SECRET,
@@ -30,9 +27,9 @@ app.use(cookieParser());
 
 app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
-app.use("/api/v1/user",auth,userRouter)
-app.use('/api/v1/companies',auth,companyRouter)
-app.use('/api/v1/invitations',inviteRouter)
+app.use("/api/v1/user", auth, userRouter)
+app.use('/api/v1/companies', auth, companyRouter)
+app.use('/api/v1/invitations', auth, inviteRouter)
 
 // createRole()
 

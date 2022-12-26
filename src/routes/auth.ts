@@ -1,14 +1,19 @@
 import express from 'express'
 import  { User }  from '../schema/userSchema'
 import bcrypt from 'bcrypt'
-import { Request, Response } from 'express'
+import { Request, Response, } from 'express'
 import { generateAccessToken } from '../util'
 import { upload } from '../util'
-import  jwt from 'jsonwebtoken' 
+import jwt, { sign, verify } from 'jsonwebtoken' 
 import endpoint from '../endpoints.config'
+import jwt_decode from "jwt-decode"
+import { auth } from "../util"
+import cookieParser from 'cookie-parser'
+import endpointsConfig from '../endpoints.config'
+const boolParser = require('express-query-boolean')
 
 const router  = express.Router()
-
+router.use(boolParser())
 router.post('/register',upload.single('photo'),
  async (req: Request<{}, {}>, res: Response) => {
     
@@ -33,16 +38,14 @@ router.post('/register',upload.single('photo'),
       password: encryptedPassword,
     })
     const accessToken = generateAccessToken({user_id: user.id})
-    const refreshToken = jwt.sign({
-      user_id: user.id,
-  }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+    const refreshToken = sign({user_id: user.id}, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
 
-  res.cookie('jwt', refreshToken, {
-    httpOnly: true, 
-    sameSite: 'none',
-    secure: true, 
-    maxAge: 24 * 60 * 60 * 1000,
-  })
+  // res.cookie('jwt', refreshToken, {
+  //   httpOnly: true, 
+  //   sameSite: 'none',
+  //   secure: true, 
+  //   maxAge: 24 * 60 * 60 * 1000,
+  // })
     res.status(201).json({
       user,
       accessToken,
@@ -71,7 +74,7 @@ router.post('/login', async(req: Request, res: Response) => {
 
           if(result) {            
               const accessToken = generateAccessToken({user_id: user.id})
-              const refreshToken = jwt.sign({
+              const refreshToken = sign({
                 user_id: user.id,
             }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
 
@@ -108,10 +111,10 @@ router.post('/refresh', (req, res) => {
 
   if (refreshToken && typeof refreshToken === 'string') {
       
-      jwt.verify(refreshToken, endpoint.REFRESH_TOKEN_SECRET,
+      verify(refreshToken, endpoint.REFRESH_TOKEN_SECRET,
       (err:any, decoded:any) => {
           if (err) {
-              return res.status(406).json({ message: 'Unauthorized' })
+              return res.status(401).json({ message: 'Unauthorized' })
           }
           else {
               const accessToken = generateAccessToken({ user_id: decoded.user_id })
@@ -119,20 +122,28 @@ router.post('/refresh', (req, res) => {
           }
       })
   } else {
-      return res.status(406).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'Unauthorized' })
   }
 })
 
-// router.get("/logout",(req,res)=>{
-//   const authHeader = req.headers["authorization"]
-//   sign(authHeader,  { expiresIn: 1 } , (logout:Boolean, err) => {
-//       if (logout) {
-//         res.json({message : 'You have been Logged Out' })
-//       }
-//       if(err) {
-//           res.json({message:'Error'})
-//       }
-//   })
-// })
+router.get("/logout",auth,(req,res)=> {
+  console.log(req.token)
+  
+  const authHeader = req.header('Authorization') || '' 
+  console.log(authHeader)
+  
+  sign(authHeader, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '1s' }, (error, logout) => {
+    console.log(logout)
+    console.log('error', error)
+    
+    
+    if (logout) {
+      res.status(200).json( {message : 'You have been Logged Out'} )
+    }
+    if(error) {
+      res.status(401).json( {error} )
+    }
+  })
+})
 
 export { router as AuthRouter}

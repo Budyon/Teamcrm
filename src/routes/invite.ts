@@ -125,44 +125,49 @@ router.post('/company', auth, async(req:Request,res:Response) => {
 router.post('/project', auth, async(req:Request,res:Response) => {
     try {
         
-        const { projectId,userId,roleId,contractDate } = req.body
-        const project = await Project.findById(projectId)
-        const user  = await User.findById(userId)
-        const boolean = project?.users.toString().includes(userId)
+    const { projectId,userId,roleId,contractDate } = req.body
+    const project = await Project.findById(projectId)
+    const user  = await User.findById(userId)
+    const boolean = project?.users.toString().includes(userId)
 
-        if(contractDate > new Date)
-            if(project !== null) {
-                if(!boolean) {
-                    const invite = await inviteProject.create({
-                        projectId,
-                        userId,
-                        roleId,
-                        contractDate,
-                        active:true
-                    })
-                
-                    const output = `<h1>Hi, we invite you to our project as a , if you accept the offer, click the link below</h1>
-                    <a href="${`http://localhost:3004/api/v1/invitations/project/${invite._id}`}">Click here</a>`
-                        
-                    await transporter.sendMail({
-                        from: user?.email,
-                        to: "budyonevistep@gmail.com",
-                        subject: `Hello from project ${project?.name}`,
-                        text: "Invitation",
-                        html: output, 
-                        headers: { 'x-cloudmta-class': 'standard' }
-                    })
-                
-                    res.json({
-                        Success:"Your invitation has arrived successfully"
-                    })
-                }
-                
-            } else {
-                res.status(403).json({
-                    error:" Dont get Project "
-                })   
-            }                   
+    if(contractDate > new Date){
+        if(project !== null) {
+            if(!boolean) {
+                const invite = await inviteProject.create({
+                    projectId,
+                    userId,
+                    roleId,
+                    contractDate,
+                    active:true
+                })
+            
+                const output = `<h1>Hi, we invite you to our project as a , if you accept the offer, click the link below</h1>
+                <a href="${`http://localhost:3004/api/v1/invitations/project/${invite._id}`}">Click here</a>`
+                    
+                await transporter.sendMail({
+                    from: user?.email,
+                    to: "budyonevistep@gmail.com",
+                    subject: `Hello from project ${project?.name}`,
+                    text: "Invitation",
+                    html: output, 
+                    headers: { 'x-cloudmta-class': 'standard' }
+                })
+            
+                res.json({
+                    Success:"Your invitation has arrived successfully"
+                })
+            }
+            
+        } else {
+            res.status(403).json({
+                error:" Dont get Project "
+            })  
+        }                   
+    } else {
+        res.status(403).json({
+            error:"Date already expires"
+        })
+        }
         
     } catch (error) {
         res.status(404).json(error)

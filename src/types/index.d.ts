@@ -5,7 +5,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: Record<string,any>,
-      token?: Record<string | JwtPayload>
+      token?: Record<string | JwtPayload>,
     }
   }
 }

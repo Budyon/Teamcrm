@@ -6,7 +6,7 @@ import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema' 
 import { projectRouter } from './project'
 import { upload } from '../util'
-
+import {auth} from '../util'
 const router  = express.Router()
 
 router.use(json())

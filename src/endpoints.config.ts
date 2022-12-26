@@ -1,6 +1,6 @@
 export default {
     PORT:'3004',
-    ACCESS_TOKEN_SECRET: 'fsdf',
+    ACCESS_TOKEN_SECRET: 'dsfsdfsdfsdfsdf',
     REFRESH_TOKEN_SECRET: 'sdfsdf',
     SESSION_SECRET:'shfosdfosdfiupsdgiufgsdufuisdigf[psdgf',
     SMTP_HOST:'smtp-relay.sendinblue.com',

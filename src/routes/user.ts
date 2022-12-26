@@ -40,4 +40,9 @@ async (req:Request, res:Response) => {
         }
     })
 
+    router.post("/get", async(req,res)=>{
+        const user = await User.findById(req.token.user_id)
+        res.json(user)
+      })
+
 export { router as userRouter}
