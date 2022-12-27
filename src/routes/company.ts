@@ -44,6 +44,11 @@ router.post("/",upload.single("logo"), async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error)
     }
-}) 
+})
+
+router.get("/:id",async (req,res)=>{
+    const company = await Company.findById(req.params.id)
+    res.json(company)
+})
 
 export { router as companyRouter}

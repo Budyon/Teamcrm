@@ -8,6 +8,10 @@ import { upload } from '../util'
 
 const router  = express.Router({ mergeParams: true })
 
+router.get("/:id",async (req,res)=>{
+    const project = await Project.findById(req.params.id)
+    res.json(project)
+})
 router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
     try {
         
