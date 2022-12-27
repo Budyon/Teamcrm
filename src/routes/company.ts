@@ -28,7 +28,8 @@ router.post("/",upload.single("logo"), async (req: Request, res: Response) => {
         const role = await Role.findOne({name:'Company owner'})
         
         await User.findByIdAndUpdate(req.token.user_id,{
-            role:role?._id
+            role:role?._id,
+            companyId:company.id
         })
         
         company.users.push({

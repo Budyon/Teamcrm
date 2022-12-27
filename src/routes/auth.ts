@@ -6,14 +6,9 @@ import { generateAccessToken } from '../util'
 import { upload } from '../util'
 import jwt, { sign, verify } from 'jsonwebtoken' 
 import endpoint from '../endpoints.config'
-import jwt_decode from "jwt-decode"
 import { auth } from "../util"
-import cookieParser from 'cookie-parser'
-import endpointsConfig from '../endpoints.config'
-const boolParser = require('express-query-boolean')
 
 const router  = express.Router()
-router.use(boolParser())
 router.post('/register',upload.single('photo'),
  async (req: Request<{}, {}>, res: Response) => {
     
