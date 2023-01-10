@@ -4,9 +4,10 @@ import bcrypt from 'bcrypt'
 import { Request, Response, } from 'express'
 import { generateAccessToken } from '../util'
 import { upload } from '../util'
-import jwt, { sign, verify } from 'jsonwebtoken' 
+import { sign, verify } from 'jsonwebtoken'
 import endpoint from '../endpoints.config'
 import { auth } from "../util"
+import fs from 'fs'
 
 const router  = express.Router()
 router.post('/register',upload.single('photo'),
@@ -21,10 +22,11 @@ router.post('/register',upload.single('photo'),
     }
 
     if (oldUser) {
-      return res.status(409).json("Email Already Exist. Please Login")
+      return res.status(409).json("Email Already Exist")
     }
     
     const encryptedPassword = await bcrypt.hash(password, 10)
+    
     const user = await User.create({
       firstname,
       lastname,
@@ -35,12 +37,6 @@ router.post('/register',upload.single('photo'),
     const accessToken = generateAccessToken({user_id: user.id})
     const refreshToken = sign({user_id: user.id}, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
 
-  // res.cookie('jwt', refreshToken, {
-  //   httpOnly: true, 
-  //   sameSite: 'none',
-  //   secure: true, 
-  //   maxAge: 24 * 60 * 60 * 1000,
-  // })
     res.status(201).json({
       user,
       accessToken,
@@ -95,7 +91,7 @@ router.post('/login', async(req: Request, res: Response) => {
         res.status(401).json({
           err:'User not found '
         })
-      } 
+      }
   } catch (error) {
     res.status(401).json(error)
   }
@@ -122,21 +118,16 @@ router.post('/refresh', (req, res) => {
 })
 
 router.get("/logout",auth,(req,res)=> {
-  console.log(req.token)
   
-  const authHeader = req.header('Authorization') || '' 
-  console.log(authHeader)
+  const authHeader = req.header('Authorization') || ''
   
   sign(authHeader, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '1s' }, (error, logout) => {
-    console.log(logout)
-    console.log('error', error)
-    
     
     if (logout) {
       res.status(200).json( {message : 'You have been Logged Out'} )
     }
     if(error) {
-      res.status(401).json( {error} )
+      res.status(401).json( {error:"Asa"} )
     }
   })
 })

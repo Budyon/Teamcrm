@@ -12,9 +12,10 @@ import { companyRouter } from "./routes/company"
 import { inviteRouter } from './routes/invite'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-import {User} from './schema/userSchema'
+import multer from 'multer'
 const app  = express()
-app.use(bodyParser.json());
+multer({ dest: 'uploads/' })
+app.use(bodyParser.json())
 app.use(cors())
 app.use(session({
   secret: endpoint.SESSION_SECRET,
@@ -23,7 +24,7 @@ app.use(session({
 }))
 app.use(json())
 app.use(urlencoded({ extended: true }))
-app.use(cookieParser());
+app.use(cookieParser())
 
 app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)
@@ -38,6 +39,7 @@ const db = "mongodb://localhost:27017/teamcrm"
 dotenv.config()
 
 app.listen(endpoint.PORT, () => {console.log(`Application started on port ${3004}`)})
+
 mongoose.connect(db).then(() => console.log('connected to db..')).catch((err:any)=>{
   console.log(err + 'error')
 })

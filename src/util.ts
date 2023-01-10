@@ -6,14 +6,13 @@ import { Role } from './schema/roleSchema'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import multer from 'multer'
+import fs from 'fs'
+
+ 
 
 export const Storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    if(req.url === '/register') {
-      cb(null, path.resolve('./src/storage/user'))
-    }else {
-      cb(null, path.resolve('./src/storage/project'))
-    }
+      cb(null, path.resolve('./src/uploads'))
   },
   filename: function (req, file, cb) {
       const type = file.originalname.split(".")
@@ -22,8 +21,9 @@ export const Storage = multer.diskStorage({
 })
 
 export const upload = multer({
+  dest: './storage/users', 
   storage: Storage,
-  limits : { fileSize : 1000000 }
+  limits : { fileSize : 1000000000 }
 })
 
 export  function createRole()  {

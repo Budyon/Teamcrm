@@ -1,5 +1,5 @@
 import express from 'express'
-import  {User}  from '../schema/userSchema'
+import  { User }  from '../schema/userSchema'
 import { Request, Response } from 'express'
 import { body,validationResult } from 'express-validator'
 
@@ -14,7 +14,6 @@ async (req:Request, res:Response) => {
     try {
         const { firstName, lastName, photo, email, password } = req.body
         const errors = validationResult(req)
-        console.log(req.files)
         
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() })
