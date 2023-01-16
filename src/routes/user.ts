@@ -6,8 +6,8 @@ import { body,validationResult } from 'express-validator'
 const router  = express.Router()
 
 router.put("/",
-body('firstName').isString(),
-body('lastName').isString(),
+body('firstname').isString(),
+body('lastname').isString(),
 body('email').isEmail(),
 body('password').isString(),
 async (req:Request, res:Response) => {
@@ -26,8 +26,8 @@ async (req:Request, res:Response) => {
             photo
         })
         if (user === undefined) {
-            res.status(201).json({
-                error: "Error"
+            res.status(404).json({
+                message: "User not defined"
             })
         } else {
             res.json({

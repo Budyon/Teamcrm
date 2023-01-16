@@ -13,8 +13,10 @@ import { inviteRouter } from './routes/invite'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import multer from 'multer'
+
 const app  = express()
 multer({ dest: 'uploads/' })
+
 app.use(bodyParser.json())
 app.use(cors())
 app.use(session({

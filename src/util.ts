@@ -7,6 +7,7 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import multer from 'multer'
 import fs from 'fs'
+import { User } from './schema/userSchema'
 
  
 
@@ -37,26 +38,34 @@ export  function createRole()  {
 
 export function generateAccessToken(user:any) {
   
-    return sign(user, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '15m' }
-    )
+  return sign(user, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
 }
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
  try {
-
    const token = req.header('Authorization')?.replace('Bearer ', '')
-  
-   if (!token) {
-     throw new Error()
-   }
    
-   const decoded = verify(token, endpoint.ACCESS_TOKEN_SECRET)
-   
-   req.token = decoded as JwtPayload
-   
-   next()
- } catch (err) {
-    res.status(401).json({error:'Please authenticate'})
+      if (!token) {
+        res.json({
+        error:'token not defined'
+        })
+      }else {
+        const decoded = verify(token, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
+        const user = await User.findById(decoded.user_id) as JwtPayload
+    
+      if(user.refreshtoken !== '') {
+        req.token = decoded as JwtPayload
+        next()
+      } else {
+          res.status(403).json({ error:'Please authenticate' })
+        }
+      }
+  } catch (error) {
+    res.status(400).json({
+      error:error
+    })
+    // console.error(error)
+    // res.status(401).json({ error:'dfsaf' })
   }
 }
 

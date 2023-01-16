@@ -24,6 +24,8 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
             webpage,
             phonenumber
         })
+        console.log(company)
+        
         
         const role = await Role.findOne({name:'Company owner'})
         

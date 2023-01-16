@@ -11,7 +11,6 @@ import { Role } from '../schema/roleSchema'
 import { Project } from '../schema/projectSchema'
 
 const router  = express.Router()
-router.use(json())
 
 let transporter = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
