@@ -1,4 +1,4 @@
-import mongoose, { model, Schema, Model, Document } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 const InviteSchemaCompany = new mongoose.Schema({
     companyId:Schema.Types.ObjectId,

@@ -1,6 +1,4 @@
-import mongoose, { model, Schema, Model, Document, mongo } from 'mongoose'
-import { User } from './userSchema'
-
+import mongoose, { Schema } from 'mongoose'
 
 const projectCompany = new mongoose.Schema({
     user_owner: { type: Schema.Types.ObjectId, ref:'User'},

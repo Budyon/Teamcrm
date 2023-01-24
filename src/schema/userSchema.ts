@@ -1,4 +1,4 @@
-import mongoose, { model, Schema, Model, Document,ObjectId, SchemaTypes } from 'mongoose'
+import mongoose from 'mongoose'
 
 const UserSchema = new mongoose.Schema({
   companyId: {type: Object, required: false },

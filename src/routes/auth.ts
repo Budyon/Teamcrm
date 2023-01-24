@@ -17,10 +17,10 @@ body('lastname').isString(),
 body('email').isEmail(),
 body('password').isString(),
  async (req: Request<{}, {}>, res: Response) => {
+  console.log(req.body)
   
   try {
     const { firstname, lastname, email, password } = req.body
-    console.log(typeof(firstname))
     
     const oldUser = await User.findOne({ email })
 
@@ -43,7 +43,7 @@ body('password').isString(),
     const user = await User.create({
       firstname,
       lastname,
-      photo:req.file?.path,
+      photo: req.file?.path,
       email: email.toLowerCase(),
       password: encryptedPassword,
     })
@@ -54,7 +54,7 @@ body('password').isString(),
     res.status(201).json({
       user,
       accessToken,
-      refreshToken
+      refreshToken,
     })
   } catch (err) {
     console.log(err)
@@ -70,7 +70,6 @@ router.post('/login', async(req: Request, res: Response) => {
         res.status(400).json("All input is required")
       }
       const user = await User.findOne({ email })
-      console.log(user)
       
       if(user) {
         bcrypt.compare(password, user.password, async function(err, result) {
@@ -90,8 +89,7 @@ router.post('/login', async(req: Request, res: Response) => {
 
               res.status(201).json({
                   user,
-                  accessToken,
-                  refreshToken
+                  accessToken
               })
           }else {
             res.json({
@@ -134,10 +132,11 @@ router.get("/logout",auth,async (req,res)=> {
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
     const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
-
+      console.log(decoded.user_id)
+      
 
     await User.findByIdAndUpdate(decoded.user_id,{
-      refreshtoken: ''
+      refreshtoken: null
     })
     res.status(200).json({
       message:'User Successfully Logout'

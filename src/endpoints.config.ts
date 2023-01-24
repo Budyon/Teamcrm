@@ -1,5 +1,6 @@
 export default {
-    PORT:'3004',
+    MONGO_URL: 'mongodb://localhost:27017/teamcrm',
+    PORT: '3004',
     ACCESS_TOKEN_SECRET: 'dsfsdfsdfsdfsdf',
     REFRESH_TOKEN_SECRET: 'sdfsdf',
     SESSION_SECRET:'shfosdfosdfiupsdgiufgsdufuisdigf[psdgf',

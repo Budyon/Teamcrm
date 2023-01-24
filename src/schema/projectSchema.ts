@@ -10,11 +10,11 @@ const userProject = new mongoose.Schema({
 const taskProject = new mongoose.Schema({
     taskName: { type: String, required: true },
     description: { type: String, required: true },
-    photo: { type: String, required: true },
+    photo: { type: String, required: false },
     setPriority: { type: String, required: true },
-    dueData: { type: Date, required: true },
-    assignMember: Schema.Types.ObjectId,
-    creator: Schema.Types.ObjectId
+    dueData: { type: Schema.Types.Date, required: true },
+    assignMember: { type:Schema.Types.ObjectId, required:false },
+    creator: { type:Schema.Types.ObjectId, required:false }
 })
 
 const ProjectSchema = new mongoose.Schema({

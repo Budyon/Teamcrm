@@ -1,4 +1,4 @@
-import { Secret, JwtPayload, } from 'jsonwebtoken'
+import { JwtPayload, } from 'jsonwebtoken'
 import { sign,verify } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import endpoint from './endpoints.config'
@@ -6,10 +6,7 @@ import { Role } from './schema/roleSchema'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import multer from 'multer'
-import fs from 'fs'
 import { User } from './schema/userSchema'
-
- 
 
 export const Storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -37,7 +34,6 @@ export  function createRole()  {
 }
 
 export function generateAccessToken(user:any) {
-  
   return sign(user, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
 }
 
@@ -47,7 +43,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
    
       if (!token) {
         res.json({
-        error:'token not defined'
+        error:'Please authentication'
         })
       }else {
         const decoded = verify(token, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
@@ -64,9 +60,5 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     res.status(400).json({
       error:error
     })
-    // console.error(error)
-    // res.status(401).json({ error:'dfsaf' })
   }
 }
-
-

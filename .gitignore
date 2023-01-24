@@ -3,3 +3,4 @@ src/storage/project/
 src/storage/user/
 .env
 dist/
+src/public

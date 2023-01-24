@@ -19,6 +19,6 @@
     },
   },
   "files": ["src/types/index.d.ts"],
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/dto/user/UserDto.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

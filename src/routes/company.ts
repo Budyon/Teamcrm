@@ -1,4 +1,4 @@
-import express, { response } from 'express'
+import express from 'express'
 import { json } from 'body-parser'
 import  { Company }  from '../schema/companySchema'
 import { Request, Response } from 'express'
@@ -6,6 +6,7 @@ import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema'
 import { projectRouter } from './project'
 import { upload } from '../util'
+
 const router  = express.Router()
 
 router.use(json())
