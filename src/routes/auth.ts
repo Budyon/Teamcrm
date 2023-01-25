@@ -9,8 +9,7 @@ import endpoint from '../endpoints.config'
 import { auth } from "../util"
 import { body, validationResult } from 'express-validator'
 import { UserDto } from '../dto/user/UserDto'
-import { callbackPromise } from 'nodemailer/lib/shared'
-
+import { UserToken } from '../schema/userTokenSchema'
 const router  = express.Router()
 
 router.post('/register',upload.single('photo'),
@@ -42,16 +41,17 @@ body('password').isString(),
     const encryptedPassword = await bcrypt.hash(password, 10)
     
     const user = await User.create({
-      firstname,
-      lastname,
+      ...req.body,
       photo: req.file?.path,
-      email: email.toLowerCase(),
       password: encryptedPassword,
     })
 
     const accessToken = generateAccessToken({ user_id: user.id })
     const refreshToken = sign({ user_id: user.id }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
-            
+            await UserToken.create({
+              userId: user.id,
+              token: refreshToken
+            })
     res.status(201).json({
       data: new UserDto(user),
       accessToken,
@@ -63,8 +63,8 @@ body('password').isString(),
 })
 
 router.post('/login',
-// body('email').isEmail(),
-// body('password').isString(),
+body('email').isEmail(),
+body('password').isString(),
 async(req: Request, res: Response) => {
 
   try {
@@ -76,11 +76,16 @@ async(req: Request, res: Response) => {
       }
       const user = await User.findOne({ email })
       
+      if(!user) {
+        res.status(401).json({
+          message:'User not found'
+        })
+      }
+      
       console.log(password,user?.password)
       
       if(user) {
         bcrypt.compare(password, user.password, async function(err, result) {
-          console.log(err)
           
           if(result) {  
               const accessToken = generateAccessToken({ user_id: user.id })
@@ -88,11 +93,7 @@ async(req: Request, res: Response) => {
                 user_id: user.id,
             }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
 
-            await User.findByIdAndUpdate(user._id,{
-              refreshtoken:refreshToken
-            })
-
-              res.status(201).json({
+              res.status(200).json({
                   data:new UserDto(user),
                   accessToken
               })
@@ -133,12 +134,8 @@ router.get("/logout",auth,async (req,res)=> {
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
     const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
-      console.log(decoded.user_id)
-      
-
-    await User.findByIdAndUpdate(decoded.user_id,{
-      refreshtoken: null
-    })
+    console.log(decoded)
+    
     res.status(200).json({
       message:'User Successfully Logout'
     })
