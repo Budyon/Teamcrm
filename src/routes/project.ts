@@ -19,15 +19,10 @@ router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
         const role = await Role.findOne({name:'Project manager'})
         const user = await User.findById(req.token.user_id)
         if(role?.id === user?.role?.toString()) {
-            const { name, description, address, webpage, phonenumber } = req.body
             const project = await Project.create({
-                name,
-                logo:req.file?.path,
+               ...req.body,
                 owner_id:req.token.user_id,
-                description,
-                address,
-                webpage,
-                phonenumber,
+                logo:req.file?.path,
                 companyId:req.params.companyId
             })
             company?.projects.push({
@@ -58,26 +53,16 @@ router.put('/', async (req:Request,res:Response) => {
         const role = await Role.findOne({name:'Project manager'})
         const user = await User.findById(req.token.user_id)
         if(role?.id === user?.role?.toString()) {
-            const { name,logo,description,address,webpage,phonenumber } = req.body
-            const project = await Project.findByIdAndUpdate({
-                name,
-                logo,
-                description,
-                address,
-                webpage,
-                phonenumber,
-            })
-
+            const project = await Project.findByIdAndUpdate(req.body)
             res.json(project)
         }else {
-            res.status(404).json({
+            res.status(403).json({
                 error:"You don't Project Manager and dont Update project" 
             })
         }
     
     } catch (error) {
         res.status(404).json(error)
-        console.log(error)
     }
 })
    

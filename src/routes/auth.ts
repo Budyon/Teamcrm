@@ -8,6 +8,7 @@ import { JwtPayload, sign, verify } from 'jsonwebtoken'
 import endpoint from '../endpoints.config'
 import { auth } from "../util"
 import { body, validationResult } from 'express-validator'
+import { UserDto } from '../dto/user/UserDto'
 
 const router  = express.Router()
 
@@ -17,7 +18,6 @@ body('lastname').isString(),
 body('email').isEmail(),
 body('password').isString(),
  async (req: Request<{}, {}>, res: Response) => {
-  console.log(req.body)
   
   try {
     const { firstname, lastname, email, password } = req.body
@@ -52,12 +52,12 @@ body('password').isString(),
     const refreshToken = sign({ user_id: user.id }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
             
     res.status(201).json({
-      user,
+      data: new UserDto(user),
       accessToken,
       refreshToken,
     })
   } catch (err) {
-    console.log(err)
+    res.status(404).json(err)
   }
 })
 
@@ -74,7 +74,9 @@ router.post('/login', async(req: Request, res: Response) => {
       if(user) {
         bcrypt.compare(password, user.password, async function(err, result) {
           if(err) {
-            res.status(400).json(err)
+              res.status(401).json({
+                error:"Invalid password"
+              })
           }
 
           if(result) {            
@@ -91,11 +93,8 @@ router.post('/login', async(req: Request, res: Response) => {
                   user,
                   accessToken
               })
-          }else {
-            res.json({
-              error:"Invalid password"
-            })
           }
+          
         })       
       }else {
         res.status(401).json({
