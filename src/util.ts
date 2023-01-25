@@ -34,7 +34,7 @@ export  function createRole()  {
 }
 
 export function generateAccessToken(user:any) {
-  return sign(user, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '8h' })
+  return sign(user, endpoint.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
 }
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {

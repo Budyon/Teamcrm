@@ -68,7 +68,6 @@ body('password').isString(),
 async(req: Request, res: Response) => {
 
   try {
-    
       const { email, password } = req.body
   
       if (!(email && password)) {
@@ -95,7 +94,8 @@ async(req: Request, res: Response) => {
 
               res.status(200).json({
                   data:new UserDto(user),
-                  accessToken
+                  accessToken,
+                  refreshToken
               })
           }else {
               return  res.status(401).json({
