@@ -9,6 +9,7 @@ import endpoint from '../endpoints.config'
 import { auth } from "../util"
 import { body, validationResult } from 'express-validator'
 import { UserDto } from '../dto/user/UserDto'
+import { callbackPromise } from 'nodemailer/lib/shared'
 
 const router  = express.Router()
 
@@ -61,9 +62,13 @@ body('password').isString(),
   }
 })
 
-router.post('/login', async(req: Request, res: Response) => {
+router.post('/login',
+// body('email').isEmail(),
+// body('password').isString(),
+async(req: Request, res: Response) => {
 
   try {
+    
       const { email, password } = req.body
   
       if (!(email && password)) {
@@ -71,15 +76,13 @@ router.post('/login', async(req: Request, res: Response) => {
       }
       const user = await User.findOne({ email })
       
+      console.log(password,user?.password)
+      
       if(user) {
         bcrypt.compare(password, user.password, async function(err, result) {
-          if(err) {
-              res.status(401).json({
-                error:"Invalid password"
-              })
-          }
-
-          if(result) {            
+          console.log(err)
+          
+          if(result) {  
               const accessToken = generateAccessToken({ user_id: user.id })
               const refreshToken = sign({
                 user_id: user.id,
@@ -90,16 +93,15 @@ router.post('/login', async(req: Request, res: Response) => {
             })
 
               res.status(201).json({
-                  user,
+                  data:new UserDto(user),
                   accessToken
               })
+          }else {
+              return  res.status(401).json({
+                 message:'Password Invalid'
+               })
           }
-          
         })       
-      }else {
-        res.status(401).json({
-          err:'User not found '
-        })
       }
   } catch (error) {
     res.status(401).json(error)
