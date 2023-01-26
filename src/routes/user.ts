@@ -10,8 +10,6 @@ const router = express.Router()
 router.put("/", upload.single('photo'),
     body('firstname').isString().optional(),
     body('lastname').isString().optional(),
-    body('email').isEmail().optional(),
-    body('password').isString().optional(),
     async (req: Request<{}, {}>, res: Response) => {
         try {
             const errors = validationResult(req)

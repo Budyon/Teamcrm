@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import express from 'express'
-import { urlencoded,json } from "body-parser"
 import { AuthRouter } from "./routes/auth"
 import  session  from 'express-session'
 import cors from 'cors'
@@ -41,9 +40,9 @@ io.on('connection', (socket:any) => {
 
 })
 
-app.use(express.static(__dirname + '/public'))
+app.use('/uploads', express.static(path.join(__dirname,'uploads')))
 
-const upload = multer({ dest: 'uploads/' })
+// const upload = multer({ dest: 'uploads/' })
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -54,10 +53,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
-// app.use(json())
-// app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
-// app.use(upload.any()) 
 
 app.use(AuthRouter)
 app.use("/api/v1/auth", AuthRouter)

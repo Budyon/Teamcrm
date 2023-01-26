@@ -27,7 +27,7 @@ body('password').isString(),
     const errors = validationResult(req)
         
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ message: errors })
     }
                 
     if (!(email && password && firstname && lastname)) {
@@ -39,10 +39,11 @@ body('password').isString(),
     }
     
     const encryptedPassword = await bcrypt.hash(password, 10)
+    console.log(req.file)
     
     const user = await User.create({
       ...req.body,
-      photo: req.file?.path,
+      photo: 'http://localhost:3004/uploads/' + req.file?.filename,
       password: encryptedPassword,
     })
 
@@ -80,8 +81,6 @@ async(req: Request, res: Response) => {
           message:'User not found'
         })
       }
-      
-      console.log(password,user?.password)
       
       if(user) {
         bcrypt.compare(password, user.password, async function(err, result) {
