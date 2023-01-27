@@ -22,8 +22,8 @@ router.put("/", upload.single('photo'),
             if (req.file && req.file.path) {
                 updated.photo = req.file.path
             }
-
-            const user = await User.findByIdAndUpdate(req.token.user_id, updated)
+            
+            const user = await User.findByIdAndUpdate(req.user?._id, updated)
 
             user?.save()
 
@@ -32,7 +32,7 @@ router.put("/", upload.single('photo'),
                 data: new UserDto(user),
             })
         } catch (error) {
-            res.json(error)
+            res.status(404).json(error)
         }
     })
 

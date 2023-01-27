@@ -60,6 +60,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       res.status(403).json({ error:'Please authenticate' })
       
   }catch (error) {
+    
     res.status(400).json({
       error:error
     })
