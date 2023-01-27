@@ -37,8 +37,9 @@ router.put("/", upload.single('photo'),
     })
 
 router.get("/", async (req, res) => {
-    const user = await User.findById(req.token.user_id)
-    res.json(user)
+    res.json({
+        data: new UserDto(req.user)
+    })
 })
 
 export { router as userRouter }

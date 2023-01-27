@@ -39,7 +39,6 @@ body('password').isString(),
     }
     
     const encryptedPassword = await bcrypt.hash(password, 10)
-    console.log(req.file)
     
     const user = await User.create({
       ...req.body,
@@ -49,6 +48,7 @@ body('password').isString(),
 
     const accessToken = generateAccessToken({ user_id: user.id })
     const refreshToken = sign({ user_id: user.id }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+            
             await UserToken.create({
               userId: user.id,
               token: refreshToken
@@ -87,9 +87,19 @@ async(req: Request, res: Response) => {
           
           if(result) {  
               const accessToken = generateAccessToken({ user_id: user.id })
+              
               const refreshToken = sign({
                 user_id: user.id,
             }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+              const checkUserToken = await UserToken.findOne({userId:user.id})
+            
+              if(checkUserToken === null) {
+                
+                await UserToken.create({
+                  userId: user.id,
+                  token: refreshToken
+                })
+              }
 
               res.status(200).json({
                   data:new UserDto(user),
@@ -125,36 +135,33 @@ router.post('/refresh', (req, res) => {
       })
   } else {
       return res.status(401).json({ message: 'Unauthorized' })
-  }
+    }
 })
 
-router.get("/logout",auth,async (req,res)=> {
+router.get("/logout",auth,async (req,res) => {
 
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
-    const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
-    console.log(decoded)
     
-    res.status(200).json({
-      message:'User Successfully Logout'
-    })
+    const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
+
+    const user = await UserToken.findOneAndDelete({token:req.body.refreshtoken})
+
+    if(decoded) {
+      if(user) {
+        return res.status(200).json({
+          message:'User Successfully Logout'
+        })
+      }
+    }
+    
+    res.status(403).json({error:'Unauthorized'})
+    
   } catch (error) {
     res.status(400).json({
       error:'User not defined'
     })
   }
 })
-
-// console.log(decode?.token,'2')
-
-  
-  // verify(authHeader, router.get('superSecret'), function(err, decoded) {      
-  //     if (err) {
-  //       return res.json({ success: false, message: 'Failed to authenticate token.' });    
-  //     } else {
-  //       req.decoded = decoded
-  //       console.log(decoded)
-  //       next()
-  //     }
 
 export { router as AuthRouter }

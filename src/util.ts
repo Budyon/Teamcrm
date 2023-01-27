@@ -7,6 +7,7 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import multer from 'multer'
 import { User } from './schema/userSchema'
+import { UserToken } from './schema/userTokenSchema'
 
 export const Storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -40,23 +41,25 @@ export function generateAccessToken(user:any) {
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
  try {
    const token = req.header('Authorization')?.replace('Bearer ', '')
-   
+      
       if (!token) {
-        res.json({
-        error:'Please authentication'
+        return res.json({
+          error:'Please authentication'
         })
-      }else {
-        const decoded = verify(token, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
-        const user = await User.findById(decoded.user_id) as JwtPayload
-    
-      if(user.refreshtoken !== '') {
-        req.token = decoded as JwtPayload
-        next()
-      } else {
-          res.status(403).json({ error:'Please authenticate' })
+      }
+      const decoded = verify(token, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
+      const user = await User.findById(decoded.user_id) as JwtPayload
+      const userToken = await UserToken.findOne({ userId: user.id }) as JwtPayload
+      
+      if(user) {
+        if(userToken){
+          req.user = user
+          return next()
         }
       }
-  } catch (error) {
+      res.status(403).json({ error:'Please authenticate' })
+      
+  }catch (error) {
     res.status(400).json({
       error:error
     })
