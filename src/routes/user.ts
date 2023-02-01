@@ -24,7 +24,6 @@ router.put("/", upload.single('photo'),
             }
             
             const user = await User.findByIdAndUpdate(req.user?._id, updated)
-            console.log(user)
             
             await user?.save()
 

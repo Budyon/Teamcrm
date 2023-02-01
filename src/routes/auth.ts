@@ -142,13 +142,11 @@ router.get("/logout",auth,async (req,res) => {
 
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
-    
     const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
-
-    const user = await UserToken.findOneAndDelete({token:req.body.refreshtoken})
-
+    const token = await UserToken.findOneAndDelete({token:req.body.refreshtoken})
+    
     if(decoded) {
-      if(user) {
+      if(token) {
         return res.status(200).json({
           message:'User Successfully Logout'
         })
