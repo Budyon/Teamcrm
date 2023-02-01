@@ -39,20 +39,25 @@ body('password').isString(),
     }
     
     const encryptedPassword = await bcrypt.hash(password, 10)
+
+    const updated = req.body
+            
+    if (req.file && req.file.path) {
+        updated.photo = 'http://localhost:3004/uploads/' + req.file?.filename
+    }
     
     const user = await User.create({
-      ...req.body,
-      photo: 'http://localhost:3004/uploads/' + req.file?.filename,
+      ...updated,
       password: encryptedPassword,
     })
 
     const accessToken = generateAccessToken({ user_id: user.id })
     const refreshToken = sign({ user_id: user.id }, endpoint.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
             
-            await UserToken.create({
-              userId: user.id,
-              token: refreshToken
-            })
+    await UserToken.create({
+      userId: user.id,
+      token: refreshToken
+    })
     res.status(201).json({
       data: new UserDto(user),
       accessToken,
@@ -143,7 +148,7 @@ router.get("/logout",auth,async (req,res) => {
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
     const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
-    const token = await UserToken.findOneAndDelete({token:req.body.refreshtoken})
+    const token = await UserToken.findOneAndDelete({ token:req.body.refreshtoken })
     
     if(decoded) {
       if(token) {

@@ -18,7 +18,7 @@ router.put("/", upload.single('photo'),
             }
 
             const updated = req.body
-
+            
             if (req.file && req.file.path) {
                 updated.photo = 'http://localhost:3004/uploads/' + req.file?.filename
             }
