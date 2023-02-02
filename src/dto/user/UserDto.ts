@@ -12,10 +12,6 @@ class UserDto {
     this.email = user.email
     this.photo = user.photo
   }
-
-  // collection(users: []) {
-  //   return users.map((donation => new this(donation)))
-  // }
 }
 
 export { UserDto }

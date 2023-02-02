@@ -6,6 +6,8 @@ import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema'
 import { projectRouter } from './project'
 import { upload } from '../util'
+import { CompanyDto } from '../dto/company/CompanyDto'
+import { userInfo } from 'os'
 
 const router  = express.Router()
 
@@ -25,32 +27,83 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
             webpage,
             phonenumber
         })
-        console.log(company)
-        
-        
-        const role = await Role.findOne({name:'Company owner'})
+        const role = await Role.findOne({ name:'Company owner' })
         
         await User.findByIdAndUpdate(req.token.user_id,{
             role:role?._id,
-            companyId:company.id
-        })
-        company.users.push({
+            companyId:company.id },{ new:true })
+
+            company.users.push({
             user:req.token.user_id,
             role:role?._id
         })
+
+        company.save()
          
-        await company.save()
-        
-        res.json(company)
+        res.json(new CompanyDto(company))
 
     } catch (error) {
-        console.log(error)
+        res.status(404).json({
+            error:error
+        })
     }
 })
 
-router.get("/:id",async (req,res)=>{
-    const company = await Company.findById(req.params.id)
-    res.json(company)
+router.get("/:id",async (req,res) => {
+    try {
+        let arr:any = []
+        const company = await Company.findById(req.params.id)
+        company?.users.forEach ( async (element,index) =>  {
+            const user = await User.findById(element.user)
+            
+            let obj = {}
+            obj = {
+                id:user?.id,
+                firstname:user?.firstname,
+                photo:user?.photo
+            }
+            arr[index] = obj
+        })
+        setTimeout(() => {
+            res.status(200).json({
+                data:arr
+            })
+          }, 1000)
+        
+        
+    } catch (error) {
+        res.status(401).json({
+            message:error
+        })
+    }
+    
+    
+    // const user = company?.users[0].user
+    // console.log(company?.users[0].user?._id)
+
+//     User.findOne({id:company?.users[0].user?._id}).populate("firstname")
+//    .then(user => {
+//       res.json(user)
+//    });
+    
+    // company?.users.forEach(element => {
+    //     console.log(element)
+
+        
+    // });
+    
+    // res.json(new CompanyDto(company))
 })
+
+let arr = []
+
+for(let i=0;i<3;i++) {
+    arr[i] = 'i'
+}
+console.log(arr)
+
+
+console.log('sdfsdfds')
+
 
 export { router as companyRouter }

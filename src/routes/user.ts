@@ -22,11 +22,9 @@ router.put("/", upload.single('photo'),
             if (req.file && req.file.path) {
                 updated.photo = 'http://localhost:3004/uploads/' + req.file?.filename
             }
-            
-            const user = await User.findByIdAndUpdate(req.user?._id, updated)
-            
-            await user?.save()
 
+             const user = await User.findByIdAndUpdate(req.user?._id, updated, {new: true})
+            
             return res.json({
                 success: "User Successfully updated",
                 data: new UserDto(user),
