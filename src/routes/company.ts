@@ -18,10 +18,11 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
     
     try {
         const { name,description,address,webpage,phonenumber } = req.body
+        
          const company = await Company.create({
             name,
             logo:req.file?.path,
-            owner_id:req.token.user_id,
+            owner_id:req.user?._id,
             description,
             address,
             webpage,
@@ -29,12 +30,12 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
         })
         const role = await Role.findOne({ name:'Company owner' })
         
-        await User.findByIdAndUpdate(req.token.user_id,{
+        await User.findByIdAndUpdate(req.user?._id,{
             role:role?._id,
             companyId:company.id },{ new:true })
 
             company.users.push({
-            user:req.token.user_id,
+            user:req.user?._id,
             role:role?._id
         })
 
@@ -55,7 +56,7 @@ router.get("/:id",async (req,res) => {
         const company = await Company.findById(req.params.id)
         company?.users.forEach ( async (element,index) =>  {
             const user = await User.findById(element.user)
-            
+
             let obj = {}
             obj = {
                 id:user?.id,
@@ -94,16 +95,5 @@ router.get("/:id",async (req,res) => {
     
     // res.json(new CompanyDto(company))
 })
-
-let arr = []
-
-for(let i=0;i<3;i++) {
-    arr[i] = 'i'
-}
-console.log(arr)
-
-
-console.log('sdfsdfds')
-
 
 export { router as companyRouter }
