@@ -18,17 +18,18 @@ const taskProject = new mongoose.Schema({
 })
 
 const ProjectSchema = new mongoose.Schema({
-    name:{ type: String, required: true  },
-    owner_id:{ type: String, required: true },
-    logo:{ type: String, required: true  },
-    description:{ type: String, required: true, },
-    address:{ type: String, required: true  },
-    webpage:{ type: String, required: true  },
-    phonenumber:{ type: Number, required: true  },
+    name: { type: String, required: true  },
+    owner_id: { type: String, required: true },
+    companyId: { type:Schema.Types.ObjectId,required:true },
+
+    logo: { type: String },
+    description: { type: String },
+    address: { type: String },
+    webpage: { type: String },
+    phonenumber: { type: Number },
     users: [ { type:userProject } ],
     tasks: [ { type:taskProject } ],
-    subtask: [ { type:taskProject } ],
-    companyId:Schema.Types.ObjectId
+    subtask: [ { type:taskProject } ]
 })
 
 const Project = mongoose.model("Project",ProjectSchema)
