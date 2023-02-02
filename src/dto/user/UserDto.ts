@@ -4,6 +4,7 @@ class UserDto {
   lastname
   email
   photo
+  companyId
 
   constructor(user: any) {
     this.id = user._id
@@ -11,6 +12,7 @@ class UserDto {
     this.lastname = user.lastname
     this.email = user.email
     this.photo = user.photo
+    this.companyId = user.companyId
   }
 }
 
