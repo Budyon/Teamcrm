@@ -52,48 +52,14 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
 
 router.get("/:id",async (req,res) => {
     try {
-        let arr:any = []
         const company = await Company.findById(req.params.id)
-        company?.users.forEach ( async (element,index) =>  {
-            const user = await User.findById(element.user)
 
-            let obj = {}
-            obj = {
-                id:user?.id,
-                firstname:user?.firstname,
-                photo:user?.photo
-            }
-            arr[index] = obj
-        })
-        setTimeout(() => {
-            res.status(200).json({
-                data:arr
-            })
-          }, 1000)
-        
-        
+        res.status(200).json(new CompanyDto(company))
     } catch (error) {
         res.status(401).json({
             message:error
         })
     }
-    
-    
-    // const user = company?.users[0].user
-    // console.log(company?.users[0].user?._id)
-
-//     User.findOne({id:company?.users[0].user?._id}).populate("firstname")
-//    .then(user => {
-//       res.json(user)
-//    });
-    
-    // company?.users.forEach(element => {
-    //     console.log(element)
-
-        
-    // });
-    
-    // res.json(new CompanyDto(company))
 })
 
 export { router as companyRouter }

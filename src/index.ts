@@ -66,6 +66,8 @@ app.get('/',(req,res)=>{
 res.sendFile(path.join(__dirname,'./public/index.html'))
 })
 
+console.log('asdasd')
+
 // createRole()
 
 dotenv.config()

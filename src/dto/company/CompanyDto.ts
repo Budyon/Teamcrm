@@ -6,15 +6,17 @@ class CompanyDto {
     address
     webpage
     phonenumber
+    users
 
-    constructor(user: any) {
-    this.id = user._id
-    this.name = user.name
-    this.owner_id = user.owner_id
-    this.description = user.description
-    this.address = user.address
-    this.webpage = user.webpage
-    this.phonenumber = user.phonenumber
+    constructor(company: any) {
+    this.id = company._id
+    this.name = company.name
+    this.owner_id = company.owner_id
+    this.description = company.description
+    this.address = company.address
+    this.webpage = company.webpage
+    this.phonenumber = company.phonenumber
+    this.users = company.users
     }
   }
   
