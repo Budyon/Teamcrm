@@ -10,7 +10,6 @@ import { userRouter } from "./routes/user"
 import { companyRouter } from "./routes/company"
 import { inviteRouter } from './routes/invite'
 import cookieParser from 'cookie-parser'
-import multer from 'multer'
 import { messageRouter } from './routes/message'
 import { chatRouter } from './routes/chat'
 import http from 'http'

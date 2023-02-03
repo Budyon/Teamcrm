@@ -143,7 +143,7 @@ router.post('/refresh', (req, res) => {
     }
 })
 
-router.get("/logout",auth,async (req,res) => {
+router.post("/logout",auth,async (req,res) => {
 
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
