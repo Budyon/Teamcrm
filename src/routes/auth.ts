@@ -41,6 +41,7 @@ body('password').isString(),
     const encryptedPassword = await bcrypt.hash(password, 10)
 
     const updated = req.body
+            console.log(req)
             
     if (req.file && req.file.path) {
         updated.photo = 'http://localhost:3004/uploads/' + req.file?.filename

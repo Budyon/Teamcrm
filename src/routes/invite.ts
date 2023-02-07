@@ -105,8 +105,8 @@ router.post('/company', auth, async(req:Request,res:Response) => {
         <a href="${`http://localhost:3004/api/v1/invitations/company/${invite._id}`}">Click here</a>`
             
           await transporter.sendMail({
-            from: user?.email,
-            to: "budyonevistep@gmail.com",
+            from: req.user?.email,
+            to: user?.email,
             subject: `Hello from company ${company?.name}`,
             text: "Invitation",
             html: output, 
@@ -121,7 +121,7 @@ router.post('/company', auth, async(req:Request,res:Response) => {
     }
 })
 
-router.post('/project', auth, async(req:Request,res:Response) => {
+router.post('/project',  async(req:Request,res:Response) => {
     try {
         
     const { projectId,userId,roleId,contractDate } = req.body

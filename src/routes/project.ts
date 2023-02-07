@@ -17,18 +17,28 @@ router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
         
         const company = await Company.findById(req.params.companyId)
         const role = await Role.findOne({name:'Project manager'})
-        const user = await User.findById(req.token.user_id)
+        const user = await User.findById(req.user?.id)
+
+        const updated = req.body
+            
+        if (req.file && req.file.path) {
+            updated.photo = 'http://localhost:3004/uploads/' + req.file?.filename
+        }
+
         if(role?.id === user?.role?.toString()) {
             const project = await Project.create({
-               ...req.body,
-                owner_id:req.token.user_id,
-                logo:req.file?.path,
+               ...updated,
+                owner_id:req.user?.id,
                 companyId:req.params.companyId
             })
-            company?.projects.push({
-                user_owner:req.token.user_id,
-                project:project?._id
-            })
+            console.log(project?._id)
+            console.log(req.user)
+            
+            
+            // company?.projects.push({
+            //     user_owner:req.user?.id,
+            //     project:project?.id
+            // })
             project?.users.push({
                 user:req.token.user_id,
                 role:role?._id
@@ -52,6 +62,7 @@ router.put('/', async (req:Request,res:Response) => {
     try {
         const role = await Role.findOne({name:'Project manager'})
         const user = await User.findById(req.token.user_id)
+
         if(role?.id === user?.role?.toString()) {
             const project = await Project.findByIdAndUpdate(req.body)
             res.json(project)
@@ -68,18 +79,9 @@ router.put('/', async (req:Request,res:Response) => {
    
 router.post('/:id/task', async (req:Request,res:Response) => {
     try {
-            const { taskName,description,photo,setPriority,dueData,assignMember } = req.body
-            const project = await Project.findById(req.params.id)
-            
-            project?.tasks.push({
-                taskName,
-                description,
-                photo,
-                setPriority,
-                dueData,
-                assignMember,
-                creator:req.token.user_id
-            })
+        const project = await Project.findById(req.params.id)
+        
+        project?.tasks.push(req.body)
 
         await project?.save()
     }

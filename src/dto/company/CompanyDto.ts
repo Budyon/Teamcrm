@@ -6,6 +6,7 @@ class CompanyDto {
     address
     webpage
     phonenumber
+    logo
     users
 
     constructor(company: any) {
@@ -17,6 +18,7 @@ class CompanyDto {
     this.webpage = company.webpage
     this.phonenumber = company.phonenumber
     this.users = company.users
+    this.logo = company.logo
     }
   }
   

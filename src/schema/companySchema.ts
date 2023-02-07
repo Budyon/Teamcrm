@@ -1,14 +1,12 @@
 import mongoose, { Schema } from 'mongoose'
 
-const projectCompany = new mongoose.Schema({
-    user_owner: { type: Schema.Types.ObjectId, ref:'User'},
-    project: { type: Schema.Types.ObjectId, ref:'Project'},
-})
+// const projectCompany = new mongoose.Schema({
+// })
 
-const userCompany = new mongoose.Schema({
-    user: { type: Schema.Types.ObjectId, ref:'User'},
-    role: { type: Schema.Types.ObjectId, ref:'Role'},
-})
+// const userCompany = new mongoose.Schema({
+//     user: { type: Schema.Types.ObjectId, ref:'User'},
+//     role: { type: Schema.Types.ObjectId, ref:'Role'},
+// },{ _id: false })
 
 const CompanySchema = new mongoose.Schema({
     name:Schema.Types.String,
@@ -18,8 +16,13 @@ const CompanySchema = new mongoose.Schema({
     address:Schema.Types.String,
     webpage:Schema.Types.String,
     phonenumber:Schema.Types.Number,
-    users: [ { type:userCompany } ],
-    projects:[ { type:projectCompany } ]
+    users: [{ 
+        user: { type: Schema.Types.ObjectId, ref:'User'},
+        role: { type: Schema.Types.ObjectId, ref:'Role'}
+     }],
+    projects:[{
+        user_owner: { type: Schema.Types.ObjectId, ref:'User'} } ],
+        project: { type: Schema.Types.ObjectId, ref:'Project' }
 })
 
 const Company = mongoose.model("Company",CompanySchema)

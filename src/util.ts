@@ -44,7 +44,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       
       if (!token) {
         return res.json({
-          error:'Please authentication'
+          error:'Please authenticate'
         })
       }
       const decoded = verify(token, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
@@ -57,12 +57,8 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
           return next()
         }
       }
-      res.status(403).json({ error:'Please authenticate' })
-      
-  }catch (error) {
-    
-    res.status(400).json({
-      error:error
-    })
+            
+  } catch (error) {
+    res.status(403).json({ error:'Please authenticate' })
   }
 }
