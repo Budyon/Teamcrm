@@ -1,14 +1,13 @@
 import mongoose, { Schema } from 'mongoose'
 
 const UserSchema = new mongoose.Schema({
-  companyId: {type: Object, required: false },
-  companyName: { type: String, required: false },
+  company: {type: Schema.Types.ObjectId, required: false, ref:'Company' },
   firstname: { type: String, required: true, },
   lastname: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
   photo:  { type: String, required: false },
-  role: { type: Schema.Types.ObjectId, required:false }
+  role: { type: Schema.Types.ObjectId, required:false, ref:'Role' }
 })
   
   const User = mongoose.model("User",UserSchema)

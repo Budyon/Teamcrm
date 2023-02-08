@@ -16,6 +16,13 @@ router.use('/:companyId/projects',projectRouter)
 router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
     
     try {
+        const user = await User.findById(req.user?._id)
+
+        if(user?.company !== undefined) {
+            return res.status(400).json({
+                message:'You already created companies'
+            })
+        }
 
         const updated = req.body
         if (req.file && req.file.path) {
@@ -27,13 +34,11 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
         
         await User.findByIdAndUpdate(req.user?._id,{
             role:role?._id,
-            companyId:company.id,
-            companyName:company.name },{ new:true })
-            
-            company.users.push({
-            user:req.user?._id,
-            role:role?._id
+            company:company.id,
         })
+            console.log(company,'company')
+            
+        company.users.push(req.user?._id)
 
         company.save()
          
@@ -46,58 +51,24 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
     }
 })
 
+
 router.get("/:id",async (req,res) => {
     try {
-        const company = await Company.findById(req.params.id)
-        .populate({
-        path: 'users',
-        model: 'User',
-        select: 'firstname id photo'
-        })
-        console.log(company)
-        res.json(company)
-    } catch (error) {
-        console.log(error)
         
+        const company = await Company.findById(req.params.id).populate({
+            path:'users',
+            model:'User',
+            select:'id firstname photo'
+        })  
+        
+        res.json(company)
+        
+    } catch (error) {
         res.status(401).json({
             error:error
         })
     }
-        // const company = await Company.findById(req.params.id)
-
-        // company?.users.forEach(async element => {
-
-            // const user = await User.findById(element.user?._id).populate('firstname')
-            
-        // })
-         
-            
-            // const t: string = doc.child.name;
-        // const company = await Company.findById(req.params.id)
-        // company?.users[0].user.populate({
-        //     firstname
-        // })
-        // let arr:any = []
-        // company?.users.forEach ( async (element,index) =>  {
-        //     const user = await User.findById(element.user)
-
-        //     let obj = {}
-        //     obj = {
-        //         id:user?.id,
-        //         firstname:user?.firstname,
-        //         photo:user?.photo
-        //     }
-        //     arr[index] = obj
-        // })
-
-        // setTimeout(() => {
-        //     res.status(200).json({
-        //         company:new CompanyDto(company),
-        //         users:arr
-        //     })
-        //   }, 1000)
-        
-    })
+})
 
 export { router as companyRouter }
 

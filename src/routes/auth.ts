@@ -41,7 +41,6 @@ body('password').isString(),
     const encryptedPassword = await bcrypt.hash(password, 10)
 
     const updated = req.body
-            console.log(req)
             
     if (req.file && req.file.path) {
         updated.photo = 'http://localhost:3004/uploads/' + req.file?.filename
@@ -132,7 +131,7 @@ router.post('/refresh', (req, res) => {
       verify(refreshToken, endpoint.REFRESH_TOKEN_SECRET,
       (err:any, decoded:any) => {
           if (err) {
-              return res.status(401).json({ message: 'Unauthorized' })
+              return res.status(403).json({ message: 'Unauthorized' })
           }
           else {
               const accessToken = generateAccessToken({ user_id: decoded.user_id })
@@ -145,22 +144,17 @@ router.post('/refresh', (req, res) => {
 })
 
 router.post("/logout",auth,async (req,res) => {
-
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
     const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload
-    const token = await UserToken.findOneAndDelete({ token:req.body.refreshtoken })
-    
-    if(decoded) {
-      if(token) {
-        return res.status(200).json({
-          message:'User Successfully Logout'
-        })
+    UserToken.findOneAndDelete({ token:req.body.refreshToken }, function (err: any, docs: any) {
+      if (err){
+        return res.status(403).json( { error:'Unauthorized' } )
       }
-    }
-    
-    res.status(403).json({error:'Unauthorized'})
-    
+      return res.status(200).json({
+        message:'User Successfully Logout'
+      })
+    })
   } catch (error) {
     res.status(400).json({
       error:'User not defined'

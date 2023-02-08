@@ -41,9 +41,21 @@ router.get("/", async (req, res) => {
 })
 
 router.get("/:id", async (req, res) => {
-    const user = await User.findById(req.params.id) 
+    console.log(req.params.id)
+    
+    const user = await User.findById(req.params.id).populate({ 
+        path: 'company',
+        model: 'Company',
+        select: 'id name logo',
+        // populate: {
+        //   path: 'user',
+        //   model: 'User',
+        //   select: 'firstname lastname ',
+        // } 
+      })
     res.json({
-        data: new UserDto(user)
+        user
+        // data: new UserDto(user)
     })
 })
 
