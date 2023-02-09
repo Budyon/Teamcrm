@@ -30,21 +30,31 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
         }
         
         const company = await Company.create(updated)
+
         const role = await Role.findOne({ name:'Company owner' })
         
         await User.findByIdAndUpdate(req.user?._id,{
             role:role?._id,
             company:company.id,
         })
-            console.log(company,'company')
-            
+        
         company.users.push(req.user?._id)
+        
+        await company.save()
+        
+        await company.populate({
+            path:'users',
+            model:'User',
+            select:'id firstname photo'
+        }) 
 
-        company.save()
-         
-        res.json(new CompanyDto(company))
+        res.json(company)
 
     } catch (error) {
+        console.log(error)
+        
+        console.log('error')
+        
         res.status(401).json({
             error:error
         })
