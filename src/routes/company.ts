@@ -48,7 +48,10 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
             select:'id firstname photo'
         }) 
 
-        res.json(company)
+        res.status(201).json({
+            message:'Company successfully created',
+            company
+        })
 
     } catch (error) {
         console.log(error)
