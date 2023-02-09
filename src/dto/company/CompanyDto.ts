@@ -18,7 +18,9 @@ class CompanyDto {
     this.webpage = company.webpage
     this.phonenumber = company.phonenumber
     this.logo = company.logo
-    this.users = company.users
+      if(company.users) {
+        this.users = company.users
+      }
     }
   }
   

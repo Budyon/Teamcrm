@@ -35,16 +35,14 @@ router.put("/", upload.single('photo'),
     })
 
 router.get("/", async (req, res) => {
-    console.log(req.user)
     
     const user = await User.findById(req.user).populate({
         path: 'company',
         model: 'Company',
         select: 'id name logo'
       })
-
-    res.json(user)
-    
+      
+    res.json(new UserDto(user))
 })
 
 router.get("/:id", async (req, res) => {
@@ -54,9 +52,7 @@ router.get("/:id", async (req, res) => {
         model: 'Company',
         select: 'id name logo'
       })
-    res.json({
-        user
-    })
+      res.json(new UserDto(user))
 })
 
 export { router as userRouter }

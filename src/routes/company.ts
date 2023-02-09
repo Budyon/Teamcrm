@@ -74,7 +74,7 @@ router.get("/:id",async (req,res) => {
             select:'id firstname photo'
         })  
         
-        res.json(company)
+        res.json(new CompanyDto(company))
         
     } catch (error) {
         res.status(401).json({
