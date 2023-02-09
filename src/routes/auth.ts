@@ -106,8 +106,14 @@ async(req: Request, res: Response) => {
                 })
               }
 
+              await user.populate({
+                path: 'company',
+                model: 'Company',
+                select: 'id name logo'
+              })
+
               res.status(200).json({
-                  data:new UserDto(user),
+                  user,
                   accessToken,
                   refreshToken
               })

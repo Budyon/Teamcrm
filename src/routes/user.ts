@@ -35,14 +35,20 @@ router.put("/", upload.single('photo'),
     })
 
 router.get("/", async (req, res) => {
-    res.json({
-        data: new UserDto(req.user)
-    })
+    console.log(req.user)
+    
+    const user = await User.findById(req.user).populate({
+        path: 'company',
+        model: 'Company',
+        select: 'id name logo'
+      })
+
+    res.json(user)
+    
 })
 
 router.get("/:id", async (req, res) => {
-    console.log(req.params.id)
-    
+        
     const user = await User.findById(req.params.id).populate({
         path: 'company',
         model: 'Company',
@@ -50,7 +56,6 @@ router.get("/:id", async (req, res) => {
       })
     res.json({
         user
-        // data: new UserDto(user)
     })
 })
 
