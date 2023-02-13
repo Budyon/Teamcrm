@@ -1,5 +1,4 @@
 import express from 'express'
-import { json } from 'body-parser'
 import { Request, Response } from 'express'
 import nodemailer from 'nodemailer'
 import { auth } from '../util'
@@ -60,11 +59,12 @@ router.get('/project/:id',async(req:Request,res:Response) => {
 
             if(inviteprojects?.active === true) {
                 const project = await Project.findById(inviteprojects?.projectId)
-
-                project?.users.push({
-                    user:inviteprojects.userId,
-                    contractDate:inviteprojects.contractDate
-                })
+                console.log(inviteprojects)
+                
+                // project?.users.push({
+                //     user:inviteprojects.userId,
+                //     contractDate:inviteprojects.contractDate
+                // })
                 await User.findByIdAndUpdate(inviteprojects.userId,{
                     role:inviteprojects.roleId
                 })
@@ -129,14 +129,9 @@ router.post('/project',  async(req:Request,res:Response) => {
     const user  = await User.findById(userId)
     const boolean = project?.users.toString().includes(userId)
 
-    if(contractDate > new Date){
-        if(project !== null) {
-            if(!boolean) {
+    if(contractDate > new Date && project !== null && !boolean) {
                 const invite = await inviteProject.create({
-                    projectId,
-                    userId,
-                    roleId,
-                    contractDate,
+                    ...req.body,
                     active:true
                 })
             
@@ -155,23 +150,14 @@ router.post('/project',  async(req:Request,res:Response) => {
                 res.json({
                     Success:"Your invitation has arrived successfully"
                 })
-            }
-            
-        } else {
-            res.status(403).json({
-                error:" Dont get Project "
-            })  
-        }                   
-    } else {
-        res.status(403).json({
-            error:"Date already expires"
-        })
-        }
-        
+        }   
     } catch (error) {
         res.status(404).json(error)
     }
 })
+
+
+
  
 export { router as inviteRouter }
    

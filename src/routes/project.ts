@@ -5,13 +5,15 @@ import { Role } from '../schema/roleSchema'
 import { User } from '../schema/userSchema' 
 import { Company } from '../schema/companySchema'
 import { upload } from '../util'
+import { projectDto } from '../dto/project/projectDto'
 
 const router  = express.Router({ mergeParams: true })
 
 router.get("/:id",async (req,res)=>{
     const project = await Project.findById(req.params.id)
-    res.json(project)
+    res.status(200).json(new projectDto(project))
 })
+
 router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
     try {
         
@@ -31,18 +33,18 @@ router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
                 owner_id:req.user?.id,
                 companyId:req.params.companyId
             })
-            console.log(project?._id)
-            console.log(req.user)
+
+            console.log(project?.id)
             
             
             // company?.projects.push({
             //     user_owner:req.user?.id,
             //     project:project?.id
             // })
-            project?.users.push({
-                user:req.token.user_id,
-                role:role?._id
-            })
+            project?.users.push(
+                req.token.user_id,
+                // role:role?._id
+            )
             await project?.save()
             await company?.save()
         
