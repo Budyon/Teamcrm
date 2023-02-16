@@ -89,17 +89,19 @@ router.get('/project/:id',async(req:Request,res:Response) => {
 
 router.post('/company', auth, async(req:Request,res:Response) => {
     try {
-        const { companyId,userId,roleId } = req.body
+        const { companyId,userId,roleName } = req.body
+        const role = await Role.findOne({name:roleName})
+        const roleId = role?._id
+        
+        const user  = await User.findById(userId)
+        const company = await Company.findById(companyId)
+
         const invite = await inviteCompany.create({
             companyId,
             userId,
             roleId,
             active:true
         })
-    
-        const role = await Role.findById(roleId)
-        const user  = await User.findById(userId)
-        const company = await Company.findById(companyId)
     
         const output = `<h1>Hi, we invite you to our company as a ${role?.name}, if you accept the offer, click the link below</h1>
         <a href="${`http://localhost:3004/api/v1/invitations/company/${invite._id}`}">Click here</a>`

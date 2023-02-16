@@ -58,25 +58,26 @@ router.get("/:id", async (req, res) => {
 })
 
 router.post('/search',async ( req,res ) => {
+
     const users = await User.find({})
     const company = await Company.find({})
-    
     const getUsers:any = []
     const getCompany:any = []
-    
-    
-    users.forEach(element => { 
-        if(element.firstname.includes(req.body.text) || element.lastname.includes(req.body.text)){
+    users.forEach(element => {
+
+        const lowerFirst = element.firstname.toLowerCase()
+        const lowerLast = element.lastname.toLowerCase()
+        
+        if(lowerFirst.includes(req.body.text.toLowerCase()) || lowerLast.includes(req.body.text.toLowerCase()) ) {
             getUsers.push(new UserDto(element))
         }
     })
-
-    company.forEach(element => { 
-        if(element.name.includes(req.body.text) ){
+    company.forEach(element => {
+        const lowerName = element.name.toLowerCase()
+        if(lowerName.includes(req.body.text.toLowerCase()) ){
             getCompany.push(new CompanyDto(element))
         }
     })
-
     res.json({
         users:getUsers,
         companies:getCompany
