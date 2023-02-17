@@ -50,7 +50,7 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
 
         res.status(201).json({
             message:'Company successfully created',
-            company
+            ...new CompanyDto(company)
         })
 
     } catch (error) {

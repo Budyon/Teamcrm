@@ -31,7 +31,8 @@ router.get('/company/:id',async(req:Request,res:Response) => {
                 }
                 
                 await User.findByIdAndUpdate(invitecompany.userId,{
-                    role:invitecompany.roleId
+                    role:invitecompany.roleId,
+                    company:invitecompany.companyId
                 })
 
                 await company?.save()

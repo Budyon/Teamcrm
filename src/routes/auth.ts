@@ -162,7 +162,7 @@ router.post("/logout",auth,async (req,res) => {
       })
     })
   } catch (error) {
-    res.status(400).json({
+    res.status(401).json({
       error:'User not defined'
     })
   }
