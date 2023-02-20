@@ -42,6 +42,12 @@ router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
             project?.users.push(
                 req.user?.id,
             )
+            console.log(req.user?.id)
+            
+            await User.findByIdAndUpdate(req.user?.id,{
+                projects:project?.id,
+            })
+
             await project?.save()
             await company?.save()
             
@@ -53,6 +59,10 @@ router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
     }
     
     } catch (error) {
+        res.status(401).json({
+            messsage:error
+        })
+    
         console.log(error)
     }
 })

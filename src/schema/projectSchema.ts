@@ -1,10 +1,10 @@
 import mongoose, { model, Schema, Model, Document, mongo } from 'mongoose'
 
-const userProject = new mongoose.Schema({
-    user: { type: Schema.Types.ObjectId, ref:'User'},
-    role: { type: Schema.Types.ObjectId, ref:'Role'},
-    contractDate:{ type:Schema.Types.Date }
-})
+// const userProject = new mongoose.Schema({
+//     user: { type: Schema.Types.ObjectId, ref:'User'},
+//     role: { type: Schema.Types.ObjectId, ref:'Role'},
+//     contractDate:{ type:Schema.Types.Date }
+// })
 
 const ProjectSchema = new mongoose.Schema({
     name: { type: String, required: true  },
