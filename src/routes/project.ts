@@ -33,22 +33,19 @@ router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
                 owner_id:req.user?.id,
                 companyId:req.params.companyId
             })
+            
+            company?.projects.push({
+                user_owner:req.user?.id,
+                project:project?.id
+            })
 
-            console.log(project?.id)
-            
-            
-            // company?.projects.push({
-            //     user_owner:req.user?.id,
-            //     project:project?.id
-            // })
             project?.users.push(
-                req.token.user_id,
-                // role:role?._id
+                req.user?.id,
             )
             await project?.save()
             await company?.save()
-        
-            res.json(project)
+            
+            res.json(new projectDto(project))
     }else {
         res.status(404).json({
             error:"You dont Project Manager and dont create project" 

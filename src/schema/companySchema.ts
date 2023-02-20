@@ -18,8 +18,9 @@ const CompanySchema = new mongoose.Schema({
         { type: Schema.Types.ObjectId, ref:'User' }
     ],
     projects:[{
-        user_owner: { type: Schema.Types.ObjectId, ref:'User'} } ],
+        user_owner: { type: Schema.Types.ObjectId, ref:'User'},
         project: { type: Schema.Types.ObjectId, ref:'Project' }
+    }]
 })
 
 const Company = mongoose.model("Company",CompanySchema)
