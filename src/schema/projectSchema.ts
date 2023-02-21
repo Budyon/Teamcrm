@@ -8,8 +8,8 @@ import mongoose, { model, Schema, Model, Document, mongo } from 'mongoose'
 
 const ProjectSchema = new mongoose.Schema({
     name: { type: String, required: true  },
-    owner_id: { type: String, required: true },
-    companyId: { type:Schema.Types.ObjectId,required:true },
+    owner_id: { type: String, },
+    companyId: { type:Schema.Types.ObjectId, },
     
     logo: { type: String },
     description: { type: String },
