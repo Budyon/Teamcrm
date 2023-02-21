@@ -5,7 +5,7 @@ class UserDto {
   email
   photo
   company
-  project
+  projects
   
   constructor(user: any) {
     this.id = user._id
@@ -16,8 +16,8 @@ class UserDto {
     if(user.company){
       this.company = user.company
     }
-    if(user.project) {
-      this.project = user.project
+    if(user.projects) {
+      this.projects = user.projects
     }
   }
 }

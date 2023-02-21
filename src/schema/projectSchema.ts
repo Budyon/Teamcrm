@@ -10,7 +10,6 @@ const ProjectSchema = new mongoose.Schema({
     name: { type: String, required: true  },
     owner_id: { type: String, },
     companyId: { type:Schema.Types.ObjectId, },
-    
     logo: { type: String },
     description: { type: String },
     address: { type: String },

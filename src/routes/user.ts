@@ -48,13 +48,17 @@ router.get("/", async (req, res) => {
 })
 
 router.get("/:id", async (req, res) => {
-        
     const user = await User.findById(req.params.id).populate({
         path: 'company',
         model: 'Company',
-        select: 'id name logo'
+        select: 'id name logo address',
+    }).populate({
+        path:'projects',
+        model: 'Project',
+        select:'id name logo'
       })
-      res.json(new UserDto(user))
+      
+      res.status(200).json(new UserDto(user))
 })
 
 router.post('/search',async ( req,res ) => {
