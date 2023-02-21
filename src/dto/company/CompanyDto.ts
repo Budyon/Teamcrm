@@ -8,6 +8,7 @@ class CompanyDto {
     phonenumber
     logo
     users
+    project
 
     constructor(company: any) {
     this.id = company._id
@@ -20,6 +21,9 @@ class CompanyDto {
     this.logo = company.logo
       if(company.users) {
         this.users = company.users
+      }
+      if(company.project = company.project) {
+        this.project = company.project
       }
     }
   }
