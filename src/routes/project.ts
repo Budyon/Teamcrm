@@ -107,9 +107,12 @@ router.post('/:id/column', async (req:Request,res:Response) => {
         // project?.column.push(req.body)
         
         await project?.save()
+
+        return res.status(200).json({ success: true })
     }
     catch (error) {
-        console.log(error)
+        
+        console.log(error, 'error =====> ')
     }
 })
 

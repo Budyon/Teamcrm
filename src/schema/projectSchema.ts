@@ -1,4 +1,5 @@
 import mongoose, { model, Schema, Model, Document, mongo } from 'mongoose'
+import { Column, ColumnSchema } from './columnSchema'
 
 const ProjectSchema = new mongoose.Schema({
     name: { type: String, required: true  },
@@ -9,8 +10,8 @@ const ProjectSchema = new mongoose.Schema({
     address: { type: String },
     webpage: { type: String },
     phonenumber: { type: Number },
-    users: [ { type: Schema.Types.ObjectId, ref:'User' } ],
-    columns: [ {type: Schema.Types.ObjectId, ref:'Column'} ],
+    users: [{ type: Schema.Types.ObjectId, ref:'User' }],
+    columns: [ColumnSchema],
 })
 
 const Project = mongoose.model("Project",ProjectSchema)
