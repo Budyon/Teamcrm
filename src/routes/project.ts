@@ -6,6 +6,7 @@ import { User } from '../schema/userSchema'
 import { Company } from '../schema/companySchema'
 import { upload } from '../util'
 import { projectDto } from '../dto/project/projectDto'
+import { Column } from 'src/schema/ColumnSchema'
 
 const router  = express.Router({ mergeParams: true })
 
@@ -90,14 +91,31 @@ router.post('/:id/task', async (req:Request,res:Response) => {
     try {
         const project = await Project.findById(req.params.id)
         
-        project?.tasks.push(req.body)
-
         await project?.save()
     }
     catch (error) {
         console.log(error)
     }
 })
+
+router.post('/:id/column', async (req:Request,res:Response) => {
+    try {
+        const project = await Project.findById(req.params.id)
+
+        const column = Column.create(req.body)
+
+        // project?.column.push(req.body)
+        
+        await project?.save()
+    }
+    catch (error) {
+        console.log(error)
+    }
+})
+
+
+
+
 
 export { router as projectRouter }
    
