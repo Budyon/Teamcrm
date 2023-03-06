@@ -90,12 +90,15 @@ router.post('/:id/task', async (req:Request,res:Response) => {
     try {
         const project = await Project.findById(req.params.id)
         
-        project?.tasks.push(req.body)
+        project?.columns.push(req.body)
 
         await project?.save()
+
+        return res.status(200).json({ success: true })
     }
     catch (error) {
-        console.log(error)
+        
+        console.log(error, 'error =====> ')
     }
 })
 
