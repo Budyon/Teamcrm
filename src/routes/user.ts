@@ -78,7 +78,7 @@ router.post('/search',async ( req,res ) => {
     })
     company.forEach(element => {
         const lowerName = element.name.toLowerCase()
-        if(lowerName.includes(req.body.text.toLowerCase()) ){
+        if(lowerName.includes(req.body.text.toLowerCase()) ) {
             getCompany.push(new CompanyDto(element))
         }
     })

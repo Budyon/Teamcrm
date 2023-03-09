@@ -1,5 +1,6 @@
 import  mongoose, { Schema } from 'mongoose'
 
+
 const taskProject = new mongoose.Schema({
     taskName: { type: String, required: true },
     status:{type: String, required: true},
@@ -13,5 +14,5 @@ const taskProject = new mongoose.Schema({
 
 const TaskProject = mongoose.model("Task",taskProject)
 
-export { Task, taskProject }
+export {  taskProject }
 

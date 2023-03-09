@@ -15,26 +15,39 @@ import { chatRouter } from './routes/chat'
 import http from 'http'
 import { Server } from "socket.io"
 import path from 'path'
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from 'index'
+// import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from 'index'
+import { Chat } from './schema/chatSchema'
 
 const app  = express()
+
 const server = http.createServer(app)
-const io = new Server<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-  SocketData
->(server, {
+
+const io = new Server
+  // ClientToServerEvents,
+  // ServerToClientEvents,
+  // InterServerEvents,
+  // SocketData
+(server, {
   transports: ['polling']
 })
 
-io.on('connection', (socket:any) => {
-  console.log(socket.id)
+io.on("connection", async (socket:any) => {
   
-  socket.on('message', (message: string) => {
-    console.log('From Front', message);
-    
-    socket.emit('message', { message: 'a new client connected barev' })
+  const { userId } = socket.handshake.query
+  const chatIds = await Chat.find({ users: { $elemMatch: { $eq: userId } } }, '_id')
+  
+  chatIds.forEach((chatId:any) => {
+    socket.join(chatId._id.toString())
+  })
+  socket.on("sendMessage", (props:any) => {
+    console.log(props)
+    io
+      .to(props.chatID.toString())
+      .emit("getMessage", {
+        content: props.content,
+        sender: props.sender,
+        chat: props.chatID,
+      })
   })
 })
 
@@ -66,7 +79,7 @@ app.get('/',(req,res)=> {
 
 dotenv.config()
 
-server.listen(endpoint.PORT, () => {console.log(`Application started on port ${endpoint.PORT}`)})
+server.listen(endpoint.PORT, () => {console.log(`Application started on port ${ endpoint.PORT }`)})
 
 mongoose.connect(endpoint.MONGO_URL).then(() => console.log('connected to db..')).catch((err:any)=>{
   console.log(err + 'error')

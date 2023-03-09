@@ -1,9 +1,8 @@
 import mongoose, { model, Schema } from 'mongoose'
-import { taskProject } from './taskSchema'
 
 const ColumnSchema = new mongoose.Schema({
     title: { type: String, required: true  },
-    tasks: [ taskProject ]
+    tasks: [ { type: Schema.Types.ObjectId, ref:'Task' } ]
 })
 
 const Column = mongoose.model('Column', ColumnSchema)

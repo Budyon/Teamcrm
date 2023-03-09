@@ -1,9 +1,20 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose  from 'mongoose'
+import  { User }  from './userSchema'
 
-const chatSchema = new mongoose.Schema ({
-    users:{type:Schema.Types.Array, ref:'User'}
-})
+const chatSchema = new mongoose.Schema({
 
-const Chat = mongoose.model("Chat",chatSchema)
+    users: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
 
-export { Chat }
+    messages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message",
+    }],
+
+}, { timestamps: true })
+
+const Chat = mongoose.model("Chat", chatSchema)
+
+export { Chat } 

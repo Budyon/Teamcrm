@@ -6,7 +6,7 @@ import { User } from '../schema/userSchema'
 import { Company } from '../schema/companySchema'
 import { upload } from '../util'
 import { projectDto } from '../dto/project/projectDto'
-import { Column } from 'src/schema/ColumnSchema'
+import { Column } from '../schema/columnSchema'
 
 const router  = express.Router({ mergeParams: true })
 
@@ -111,7 +111,6 @@ router.post('/:id/column', async (req:Request,res:Response) => {
         return res.status(200).json({ success: true })
     }
     catch (error) {
-        
         console.log(error, 'error =====> ')
     }
 })
