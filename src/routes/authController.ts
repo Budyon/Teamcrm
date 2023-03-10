@@ -1,15 +1,15 @@
 import express from 'express'
-import  { User }  from '../schema/userSchema'
+import  { User }  from '../database/schema/userSchema'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import { generateAccessToken } from '../util'
 import { upload } from '../util'
 import { JwtPayload, sign, verify } from 'jsonwebtoken'
 import endpoint from '../endpoints.config'
-import { auth } from "../util"
+import { auth } from '../util'
 import { body, validationResult } from 'express-validator'
 import { UserDto } from '../dto/user/UserDto'
-import { UserToken } from '../schema/userTokenSchema'
+import { UserToken } from '../database/schema/userTokenSchema'
 const router  = express.Router()
 
 router.post('/register',upload.single('photo'),
@@ -31,11 +31,11 @@ body('password').isString(),
     }
                 
     if (!(email && password && firstname && lastname)) {
-      res.status(400).json({ error:"All input is required" })
+      res.status(400).json({ error:'All input is required' })
     }
 
     if (oldUser) {
-      return res.status(400).json("Email Already Exist")
+      return res.status(400).json('Email Already Exist')
     }
     
     const encryptedPassword = await bcrypt.hash(password, 10)
@@ -77,7 +77,7 @@ async(req: Request, res: Response) => {
       const { email, password } = req.body
   
       if (!(email && password)) {
-        res.status(400).json("All input is required")
+        res.status(400).json('All input is required')
       }
       const user = await User.findOne({ email })
       
@@ -149,7 +149,7 @@ router.post('/refresh', (req, res) => {
     }
 })
 
-router.post("/logout",auth,async (req,res) => {
+router.post('/logout',auth,async (req,res) => {
   try {
     const authHeader = req.header('Authorization')?.replace('Bearer ', '') || ''
     const decoded = verify(authHeader, endpoint.ACCESS_TOKEN_SECRET) as JwtPayload

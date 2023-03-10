@@ -3,11 +3,11 @@ const mongoose = require('mongoose')
 const notifScema = mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: 'User'
     },
     reciver: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: 'User'
     },
     content: {
         type: String,
@@ -15,11 +15,11 @@ const notifScema = mongoose.Schema({
     },
     chat: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Chat"
+        ref: 'Chat'
     },
    
 }, { timestamps: true })
 
 
-const Notif = mongoose.model("Notif", notifScema);
+const Notif = mongoose.model('Notif', notifScema);
 export  { Notif }

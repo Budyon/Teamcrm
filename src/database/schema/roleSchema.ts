@@ -10,6 +10,6 @@ const RoleSchema = new mongoose.Schema(
     }
 )
 
-const Role = mongoose.model("Role",RoleSchema)
+const Role = mongoose.model('Role',RoleSchema)
 
 export { Role }

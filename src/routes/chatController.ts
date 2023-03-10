@@ -1,6 +1,6 @@
 import express from 'express'
 import { chatDto } from '../dto/chat/ChatDto'
-import { Chat }  from '../schema/chatSchema'
+import { Chat }  from '../database/schema/chatSchema'
 
 const router = express.Router()
 
@@ -16,7 +16,7 @@ const router = express.Router()
         })
             .populate('users', 'firstname lastname photo email')
             .populate('messages', 'content sender')
-            .populate('notifs', 'content sender')
+            .populate('notif', 'content sender')
         if (chat) {
             res.status(200).json(new chatDto(chat))
         } else {

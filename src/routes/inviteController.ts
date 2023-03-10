@@ -2,21 +2,21 @@ import express from 'express'
 import { Request, Response } from 'express'
 import nodemailer from 'nodemailer'
 import { auth } from '../util'
-import { inviteCompany } from '../schema/inviteSchema'
-import { inviteProject } from '../schema/inviteSchema'
-import { User } from '../schema/userSchema'
-import { Company } from '../schema/companySchema'
-import { Role } from '../schema/roleSchema'
-import { Project } from '../schema/projectSchema'
+import { inviteCompany } from '../database/schema/inviteSchema'
+import { inviteProject } from '../database/schema/inviteSchema'
+import { User } from '../database/schema/userSchema'
+import { Company } from '../database/schema/companySchema'
+import { Role } from '../database/schema/roleSchema'
+import { Project } from '../database/schema/projectSchema'
 
 const router  = express.Router()
 
 let transporter = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
+    host: 'smtp.mailtrap.io',
     port: 2525,
     auth: {
-      user: "23284279f95fc8",
-      pass: "b62a5e30670c59"
+      user: '23284279f95fc8',
+      pass: 'b62a5e30670c59'
     }
   })
 
@@ -30,7 +30,7 @@ router.get('/company/:id',async(req:Request,res:Response) => {
                     company?.users.push(invitecompany?.userId)
                 }
                 
-                await User.findByIdAndUpdate(invitecompany.userId,{
+                await User.findByIdAndUpdate(invitecompany.userId, {
                     role:invitecompany.roleId,
                     company:invitecompany.companyId
                 })
@@ -41,11 +41,11 @@ router.get('/company/:id',async(req:Request,res:Response) => {
                 await invitecompany.save()
 
                 res.json({
-                    Success:"You are successfully join in our company"
+                    Success:'You are successfully join in our company'
                 })
             }else {
                 res.json({
-                    error:"The invitation has already expired"
+                    error:'The invitation has already expired'
                 })
             }
     } catch (error) {
@@ -60,7 +60,6 @@ router.get('/project/:id',async(req:Request,res:Response) => {
 
             if(inviteprojects?.active === true) {
                 const project = await Project.findById(inviteprojects?.projectId)
-                console.log(inviteprojects)
                 
                 // project?.users.push({
                 //     user:inviteprojects.userId,
@@ -75,16 +74,16 @@ router.get('/project/:id',async(req:Request,res:Response) => {
                 inviteprojects.active = false
                 await inviteprojects.save()
 
-                res.json({
-                    Success:"You are already in our project"
+                res.status(200).json({
+                    Success:'You are already in our project'
                 })
             }else {
-                res.json({
-                    error:"The invitation has already expired"
+                res.status(403).json({
+                    error:'The invitation has already expired'
                 })
             }
     } catch (error) {
-        res.json(error)
+        res.status(403).json(error)
     }
 })
 
@@ -105,19 +104,19 @@ router.post('/company', auth, async(req:Request,res:Response) => {
         })
     
         const output = `<h1>Hi, we invite you to our company as a ${role?.name}, if you accept the offer, click the link below</h1>
-        <a href="${`http://localhost:3004/api/v1/invitations/company/${invite._id}`}">Click here</a>`
+        <a href='${`http://localhost:3004/api/v1/invitations/company/${invite._id}`}'>Click here</a>`
             
           await transporter.sendMail({
             from: req.user?.email,
             to: user?.email,
             subject: `Hello from company ${company?.name}`,
-            text: "Invitation",
+            text: 'Invitation',
             html: output, 
             headers: { 'x-cloudmta-class': 'standard' }
           })
     
         res.json({
-            Success:"Your invitation has arrived successfully"
+            Success:'Your invitation has arrived successfully'
         })
     } catch (error) {
         console.log(error)
@@ -139,19 +138,19 @@ router.post('/project',  async(req:Request,res:Response) => {
                 })
             
                 const output = `<h1>Hi, we invite you to our project as a , if you accept the offer, click the link below</h1>
-                <a href="${`http://localhost:3004/api/v1/invitations/project/${invite._id}`}">Click here</a>`
+                <a href='${`http://localhost:3004/api/v1/invitations/project/${invite._id}`}'>Click here</a>`
                     
                 await transporter.sendMail({
                     from: user?.email,
-                    to: "budyonevistep@gmail.com",
+                    to: 'budyonevistep@gmail.com',
                     subject: `Hello from project ${project?.name}`,
-                    text: "Invitation",
+                    text: 'Invitation',
                     html: output, 
                     headers: { 'x-cloudmta-class': 'standard' }
                 })
             
                 res.json({
-                    Success:"Your invitation has arrived successfully"
+                    Success:'Your invitation has arrived successfully'
                 })
         }   
     } catch (error) {

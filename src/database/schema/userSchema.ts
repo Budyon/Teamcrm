@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
   role: { type: Schema.Types.ObjectId, required:false, ref:'Role' }
 })
   
-  const User = mongoose.model("User",UserSchema)
+  const User = mongoose.model('User',UserSchema)
 
   export { User }
   

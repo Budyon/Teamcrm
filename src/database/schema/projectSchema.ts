@@ -14,7 +14,7 @@ const ProjectSchema = new mongoose.Schema({
     columns: [ ColumnSchema ],
 })
 
-const Project = mongoose.model("Project",ProjectSchema)
+const Project = mongoose.model('Project',ProjectSchema)
 
 export { Project }
 

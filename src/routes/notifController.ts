@@ -1,14 +1,11 @@
 import express from 'express'
-import  { Message }  from '../schema/messageSchema'
-import http from 'http'
-import socketio from 'socket.io'
-import { Notif } from '../schema/notifSchema'
+import { Notif } from '../database/schema/notifSchema'
 import { notifDto } from '../dto/notif/notifDto'
 
 const router = express.Router()
 
 router.post('/sendnotif',async (req, res) => {
-    const { sender, reciver, content, chatID } = req.body;
+    const { sender, reciver, content, chatID } = req.body
     const newNotif = {
         sender: sender,
         reciver: reciver,
@@ -23,7 +20,7 @@ router.post('/sendnotif',async (req, res) => {
         if (notif){
          res.status(200).json(new notifDto(notif))
         }else {
-            await Notif.create(newNotif);
+            await Notif.create(newNotif)
         }    
         res.status(200).json(new notifDto(newNotif))
     } catch (error) {
@@ -49,7 +46,7 @@ router.post('/setreadnotif', async (req, res) => {
         const notifs = await Notif.find({
             reciver: currentUserId
         })
-            .populate('sender', 'name surname avatar email')
+            .populate('sender', 'firstname lastname photo email')
 
         res.json(notifs)
     } catch (error) {

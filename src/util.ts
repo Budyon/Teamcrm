@@ -2,19 +2,19 @@ import { JwtPayload, } from 'jsonwebtoken'
 import { sign,verify } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import endpoint from './endpoints.config'
-import { Role } from './schema/roleSchema'
+import { Role } from './database/schema/roleSchema'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import multer from 'multer'
-import { User } from './schema/userSchema'
-import { UserToken } from './schema/userTokenSchema'
+import { User } from './database/schema/userSchema'
+import { UserToken } from './database/schema/userTokenSchema'
 
 export const Storage = multer.diskStorage({
   destination: function(req, file, cb) {
       cb(null, path.resolve('./src/uploads'))
   },
   filename: function (req, file, cb) {
-      const type = file.originalname.split(".")
+      const type = file.originalname.split('.')
       cb(null, `${uuidv4()}.${type[1]}`)
   }
 })
@@ -26,7 +26,7 @@ export const upload = multer({
 })
 
 export  function createRole()  {
-    const arr = ["Product manager","Company owner","Project manager","Executive manager"]
+    const arr = ['Product manager','Company owner','Project manager','Executive manager']
     arr.forEach(async element => {
         await Role.create({
             name:element
@@ -43,7 +43,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
    const token = req.header('Authorization')?.replace('Bearer ', '')
       
       if (!token) {
-        return res.json({
+        return res.status(403).json({
           error:'Please authenticate'
         })
       }

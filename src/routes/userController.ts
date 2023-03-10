@@ -1,15 +1,15 @@
 import express from 'express'
-import { User } from '../schema/userSchema'
+import { User } from '../database/schema/userSchema'
 import { Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import { upload } from '../util'
 import { UserDto } from '../dto/user/UserDto'
-import { Company } from '../schema/companySchema'
+import { Company } from '../database/schema/companySchema'
 import { CompanyDto } from '../dto/company/CompanyDto'
 
 const router = express.Router()
 
-router.put("/", upload.single('photo'),
+router.put('/', upload.single('photo'),
     body('firstname').isString().optional(),
     body('lastname').isString().optional(),
     async (req: Request<{}, {}>, res: Response) => {
@@ -28,7 +28,7 @@ router.put("/", upload.single('photo'),
              const user = await User.findByIdAndUpdate(req.user?._id, updated, {new: true})
             
             return res.json({
-                success: "User Successfully updated",
+                success: 'User Successfully updated',
                 data: new UserDto(user),
             })
         } catch (error) {
@@ -36,7 +36,7 @@ router.put("/", upload.single('photo'),
         }
     })
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
     
     const user = await User.findById(req.user).populate({
         path: 'company',
@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
     res.json(new UserDto(user))
 })
 
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
     const user = await User.findById(req.params.id).populate({
         path: 'company',
         model: 'Company',

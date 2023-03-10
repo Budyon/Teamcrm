@@ -1,21 +1,21 @@
 import express from 'express'
-import { Project }  from '../schema/projectSchema'
+import { Project }  from '../database/schema/projectSchema'
 import { Request, Response } from 'express'
-import { Role } from '../schema/roleSchema'
-import { User } from '../schema/userSchema' 
-import { Company } from '../schema/companySchema'
+import { Role } from '../database/schema/roleSchema'
+import { User } from '../database/schema/userSchema' 
+import { Company } from '../database/schema/companySchema'
 import { upload } from '../util'
 import { projectDto } from '../dto/project/projectDto'
-import { Column } from '../schema/columnSchema'
+import { Column } from '../database/schema/columnSchema'
 
 const router  = express.Router({ mergeParams: true })
 
-router.get("/:id",async (req,res)=>{
+router.get('/:id',async (req,res)=>{
     const project = await Project.findById(req.params.id)
     res.status(200).json(new projectDto(project))
 })
 
-router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
+router.post('/',upload.single('logo'), async (req:Request,res:Response) => {
     try {
         
         const company = await Company.findById(req.params.companyId)
@@ -55,7 +55,7 @@ router.post('/',upload.single("logo"), async (req:Request,res:Response) => {
             res.json(new projectDto(project))
     }else {
         res.status(404).json({
-            error:"You dont Project Manager and dont create project" 
+            error:'You dont Project Manager and dont create project' 
         })
     }
     
@@ -78,7 +78,7 @@ router.put('/', async (req:Request,res:Response) => {
             res.json(project)
         }else {
             res.status(403).json({
-                error:"You don't Project Manager and dont Update project" 
+                error:'You dont Project Manager and dont Update project' 
             })
         }
     

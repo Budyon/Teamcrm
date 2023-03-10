@@ -5,6 +5,6 @@ const Token = new mongoose.Schema({
     token:({ type: Schema.Types.String })
 })
 
-const UserToken = mongoose.model("Token",Token)
+const UserToken = mongoose.model('Token',Token)
 
 export { UserToken }

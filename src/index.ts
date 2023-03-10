@@ -1,23 +1,23 @@
 import mongoose from 'mongoose'
 import express from 'express'
-import { AuthRouter } from "./routes/auth"
+import { AuthRouter } from './routes/authController'
 import  session  from 'express-session'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 import endpoint from './endpoints.config'
-import { auth } from "./util"
-import { userRouter } from "./routes/user" 
-import { companyRouter } from "./routes/company"
-import { inviteRouter } from './routes/invite'
+import { auth } from './util'
+import { userRouter } from './routes/userController' 
+import { companyRouter } from './routes/companyController'
+import { inviteRouter } from './routes/inviteController'
 import cookieParser from 'cookie-parser'
-import { messageRouter } from './routes/message'
-import { chatRouter } from './routes/chat'
+import { messageRouter } from './routes/messageController'
+import { chatRouter } from './routes/chatController'
 import http from 'http'
-import { Server } from "socket.io"
+import { Server } from 'socket.io'
 import path from 'path'
 // import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from 'index'
-import { Chat } from './schema/chatSchema'
-import { notifRouter } from './routes/notif'
+import { Chat } from './database/schema/chatSchema'
+import { notifRouter } from './routes/notifController'
 
 const app  = express()
 
@@ -32,7 +32,7 @@ const io = new Server
   transports: ['polling']
 })
 
-io.on("connection", async (socket:any) => {
+io.on('connection', async (socket:any) => {
   
   const { userId } = socket.handshake.query
   const chatIds = await Chat.find({ users: { $elemMatch: { $eq: userId } } }, '_id')
@@ -40,33 +40,33 @@ io.on("connection", async (socket:any) => {
   chatIds.forEach((chatId:any) => {
     socket.join(chatId._id.toString())
   })
-  socket.on("sendMessage", (props:any) => {
+  socket.on('sendMessage', (props:any) => {
     console.log(props)
     io
       .to(props.chatID.toString())
-      .emit("getMessage", {
+      .emit('getMessage', {
         content: props.content,
         sender: props.sender,
         chat: props.chatID,
       })
   })
 
-  socket.on("sendNotif", (props:any) => {
+  socket.on('sendNotif', (props:any) => {
     io
       .to(props.chatID.toString())
-      .emit("getNotif",
+      .emit('getNotif',
         {
           content: props.content,
           sender: props.sender,
           chat: props.chatID,
         })
   })
-  socket.on("setTyping", () => {
-    socket.broadcast.emit("Typing")
+  socket.on('setTyping', () => {
+    socket.broadcast.emit('Typing')
   }
   )
-  socket.on("stopTyping", () => {
-    socket.broadcast.emit("stopedTyping")
+  socket.on('stopTyping', () => {
+    socket.broadcast.emit('stopedTyping')
   })
 
 })
@@ -84,8 +84,8 @@ app.use(session({
 app.use(cookieParser())
 
 app.use(AuthRouter)
-app.use("/api/v1/auth", AuthRouter)
-app.use("/api/v1/user", auth, userRouter)
+app.use('/api/v1/auth', AuthRouter)
+app.use('/api/v1/user', auth, userRouter)
 app.use('/api/v1/companies', auth, companyRouter)
 app.use('/api/v1/invitations', inviteRouter)
 app.use('/api/v1/messages',auth,messageRouter)

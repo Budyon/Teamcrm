@@ -1,10 +1,10 @@
 import express from 'express'
 import { json } from 'body-parser'
-import  { Company }  from '../schema/companySchema'
+import  { Company }  from '../database/schema/companySchema'
 import { Request, Response } from 'express'
-import { Role } from '../schema/roleSchema'
-import { User } from '../schema/userSchema'
-import { projectRouter } from './project'
+import { Role } from '../database/schema/roleSchema'
+import { User } from '../database/schema/userSchema'
+import { projectRouter } from './projectController'
 import { upload } from '../util'
 import { CompanyDto } from '../dto/company/CompanyDto'
 
@@ -13,7 +13,7 @@ const router  = express.Router()
 router.use(json())
 router.use('/:companyId/projects',projectRouter)
 
-router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
+router.post('/',upload.single('logo'), async (req: Request, res: Response) => {
     
     try {
         const user = await User.findById(req.user?._id)
@@ -65,7 +65,7 @@ router.post("/",upload.single('logo'), async (req: Request, res: Response) => {
 })
 
 
-router.get("/:id",async (req,res) => {
+router.get('/:id',async (req,res) => {
     try {
         
         const company = await Company.findById(req.params.id).populate({

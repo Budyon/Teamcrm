@@ -12,7 +12,7 @@ const taskProject = new mongoose.Schema({
     creator: { type:Schema.Types.ObjectId, required:false }
 })
 
-const TaskProject = mongoose.model("Task",taskProject)
+const TaskProject = mongoose.model('Task',taskProject)
 
 export {  taskProject }
 
