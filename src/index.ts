@@ -49,11 +49,30 @@ io.on("connection", async (socket:any) => {
         chat: props.chatID,
       })
   })
+
+  socket.on("sendNotif", (props:any) => {
+    io
+      .to(props.chatID.toString())
+      .emit("getNotif",
+        {
+          content: props.content,
+          sender: props.sender,
+          chat: props.chatID,
+        })
+  })
+  socket.on("setTyping", () => {
+    socket.broadcast.emit("Typing")
+  }
+  )
+  socket.on("stopTyping", () => {
+    socket.broadcast.emit("stopedTyping")
+  })
+
 })
 
 app.use('/uploads', express.static(path.join(__dirname,'uploads')))
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 app.use(session({
