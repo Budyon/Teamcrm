@@ -3,6 +3,7 @@ import  { Message }  from '../schema/messageSchema'
 import http from 'http'
 import socketio from 'socket.io'
 import { Chat } from '../schema/chatSchema'
+import { messageDto } from '../dto/message/MessageDto'
 
 const router = express.Router()
 
@@ -23,7 +24,7 @@ router.post('/', async ( req,res ) => {
                 chat.messages = [...chat.messages, message._id]
                 await chat.save()
             }
-            return res.send(newMessage)
+            return res.status(200).json(new messageDto(newMessage))
         } catch (error) {
             console.log(error)
             res.status(400).send(error)

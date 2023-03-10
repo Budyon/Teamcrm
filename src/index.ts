@@ -17,6 +17,7 @@ import { Server } from "socket.io"
 import path from 'path'
 // import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from 'index'
 import { Chat } from './schema/chatSchema'
+import { notifRouter } from './routes/notif'
 
 const app  = express()
 
@@ -89,6 +90,7 @@ app.use('/api/v1/companies', auth, companyRouter)
 app.use('/api/v1/invitations', inviteRouter)
 app.use('/api/v1/messages',auth,messageRouter)
 app.use('/api/v1/chats',auth,chatRouter)
+app.use('/api/v1/notifs',auth,notifRouter)
 
 app.get('/',(req,res)=> {
   res.sendFile(path.join(__dirname,'./public/index.html'))

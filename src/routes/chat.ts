@@ -1,4 +1,5 @@
 import express from 'express'
+import { chatDto } from '../dto/chat/ChatDto'
 import { Chat }  from '../schema/chatSchema'
 
 const router = express.Router()
@@ -13,11 +14,11 @@ const router = express.Router()
                 { users: { $elemMatch: { $eq: secondUserId } } }
             ]
         })
-            .populate('users', 'name surname avatar email')
+            .populate('users', 'firstname lastname photo email')
             .populate('messages', 'content sender')
             .populate('notifs', 'content sender')
         if (chat) {
-            res.send(chat);
+            res.status(200).json(new chatDto(chat))
         } else {
             let chatData = {
                 chatName: [currentUserId, secondUserId],
@@ -26,8 +27,8 @@ const router = express.Router()
             };
             try {
                 const createdChat = await Chat.create(chatData);
-                const fullChat = await Chat.findOne({ _id: createdChat._id }).populate("users", "name surname avatar email");
-                res.send(fullChat)
+                const fullChat = await Chat.findOne({ _id: createdChat._id }).populate('users', 'firstname lastname photo email')
+                res.status(200).json(new chatDto(fullChat))
             } catch (error) {
                 res.status(500).json(error)
             }

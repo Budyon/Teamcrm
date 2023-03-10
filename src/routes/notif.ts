@@ -3,6 +3,7 @@ import  { Message }  from '../schema/messageSchema'
 import http from 'http'
 import socketio from 'socket.io'
 import { Notif } from '../schema/notifSchema'
+import { notifDto } from '../dto/notif/notifDto'
 
 const router = express.Router()
 
@@ -19,9 +20,12 @@ router.post('/sendnotif',async (req, res) => {
         const notif = await Notif.findOneAndUpdate({ chat: chatID }, {
             content: content
         })
-        if (notif) res.send(notif)
-        else await Notif.create(newNotif);
-        res.send(newNotif);
+        if (notif){
+         res.status(200).json(new notifDto(notif))
+        }else {
+            await Notif.create(newNotif);
+        }    
+        res.status(200).json(new notifDto(newNotif))
     } catch (error) {
         console.log(error)
         res.status(400).send(error)
@@ -32,7 +36,7 @@ router.post('/setreadnotif', async (req, res) => {
     const  notifId  = req.params
     try {
         const readNotif = await Notif.deleteOne({ _id: notifId })
-        return res.send(readNotif)
+        return res.status(200).json(readNotif)
     } catch (error) {
         console.log(error);
         res.status(400).send(error)
@@ -53,3 +57,5 @@ router.post('/setreadnotif', async (req, res) => {
     }
 
 })
+
+export { router as notifRouter }
