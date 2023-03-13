@@ -16,7 +16,7 @@ const router = express.Router()
         })
             .populate('users', 'firstname lastname photo email')
             .populate('messages', 'content sender')
-            .populate('notif', 'content sender')
+            .populate('notifs', 'content sender')
         if (chat) {
             res.status(200).json(new chatDto(chat))
         } else {
@@ -26,8 +26,9 @@ const router = express.Router()
                 users: [currentUserId, secondUserId],
             };
             try {
-                const createdChat = await Chat.create(chatData);
+                const createdChat = await Chat.create(chatData)
                 const fullChat = await Chat.findOne({ _id: createdChat._id }).populate('users', 'firstname lastname photo email')
+                console.log(fullChat)
                 res.status(200).json(new chatDto(fullChat))
             } catch (error) {
                 res.status(500).json(error)
