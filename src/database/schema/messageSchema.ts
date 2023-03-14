@@ -1,8 +1,8 @@
-import mongoose, { Schema } from 'mongoose'
+import { Schema, model } from 'mongoose'
 
-const messageSchema = new mongoose.Schema({
+const messageSchema = new Schema({
     sender: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User'
     },
     content: {
@@ -10,14 +10,14 @@ const messageSchema = new mongoose.Schema({
         trim: true,
     },
     chat: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Chat'
     }
     
 }, { timestamps: true })
 
 
-const Message = mongoose.model('Message', messageSchema)
+const Message = model('Message', messageSchema)
 
 export { Message }
 

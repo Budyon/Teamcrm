@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose'
+import  { Schema, model } from 'mongoose'
 
-const CompanySchema = new mongoose.Schema({
+const CompanySchema = new Schema({
     name:{ type: Schema.Types.String, required:true },
     owner_id: { type: Schema.Types.ObjectId,ref:'User' },
     logo: { type: Schema.Types.String },
@@ -17,6 +17,6 @@ const CompanySchema = new mongoose.Schema({
     }]
 })
 
-const Company = mongoose.model( 'Company',CompanySchema )
+const Company = model( 'Company',CompanySchema )
 
 export { Company }

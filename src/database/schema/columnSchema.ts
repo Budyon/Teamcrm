@@ -1,10 +1,10 @@
-import mongoose, { model, Schema } from 'mongoose'
+import { Schema,model } from 'mongoose'
 
-const ColumnSchema = new mongoose.Schema({
-    title: { type: String, required: true  },
+const ColumnSchema = new Schema({
+    title: { type: String, required: true },
     tasks: [ { type: Schema.Types.ObjectId, ref:'Task' } ]
 })
 
-const Column = mongoose.model('Column', ColumnSchema)
+const Column = model('Column', ColumnSchema)
 
 export { Column, ColumnSchema }

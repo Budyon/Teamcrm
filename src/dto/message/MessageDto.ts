@@ -10,6 +10,6 @@ class messageDto {
         this.chat = chat.chat
         this.content = chat.content
     }
-  }
+}
   
   export { messageDto }

@@ -1,7 +1,7 @@
-import  mongoose, { Schema } from 'mongoose'
+import { Schema,model } from 'mongoose'
 
 
-const taskProject = new mongoose.Schema({
+const taskProject = new Schema({
     taskName: { type: String, required: true },
     status:{type: String, required: true},
     description: { type: String, required: false },
@@ -12,7 +12,7 @@ const taskProject = new mongoose.Schema({
     creator: { type:Schema.Types.ObjectId, required:false }
 })
 
-const TaskProject = mongoose.model('Task',taskProject)
+const TaskProject = model('Task',taskProject)
 
 export {  taskProject }
 

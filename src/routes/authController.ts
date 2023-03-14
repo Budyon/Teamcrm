@@ -10,6 +10,7 @@ import { auth } from '../util'
 import { body, validationResult } from 'express-validator'
 import { UserDto } from '../dto/user/UserDto'
 import { UserToken } from '../database/schema/userTokenSchema'
+
 const router  = express.Router()
 
 router.post('/register',upload.single('photo'),

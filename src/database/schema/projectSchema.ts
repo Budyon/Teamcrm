@@ -1,7 +1,7 @@
-import mongoose, { model, Schema, Model, Document, mongo } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { ColumnSchema } from './columnSchema'
 
-const ProjectSchema = new mongoose.Schema({
+const ProjectSchema = new Schema({
     name: { type: String, required: true  },
     owner_id: { type: String, },
     companyId: { type:Schema.Types.ObjectId, },
@@ -14,7 +14,7 @@ const ProjectSchema = new mongoose.Schema({
     columns: [ ColumnSchema ],
 })
 
-const Project = mongoose.model('Project',ProjectSchema)
+const Project = model('Project',ProjectSchema)
 
 export { Project }
 

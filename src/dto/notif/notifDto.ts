@@ -12,6 +12,6 @@ class notifDto {
         this.content = notif.content
         this.chat = notif.chat
     }
-  }
+}
   
   export { notifDto }
