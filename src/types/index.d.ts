@@ -10,21 +10,23 @@ declare global {
   }
 }
 
-// interface ServerToClientEvents {
-//   noArg: () => void;
-//   basicEmit: (a: number, b: string, c: Buffer) => void;
-//   withAck: (d: string, callback: (e: number) => void) => void;
-// }
+interface ServerToClientEvents {
+  getMessage: (a: any) => void;
+  getNotif: (a: any) => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+  // getMessage: () => (a: number, b: string, c: Buffer) => void;
+  // getNotif: () => (a: number, b: string, c: Buffer) => void;
+}
+interface ClientToServerEvents {
+  hello: () => void;
+}
 
-// interface ClientToServerEvents {
-//   hello: () => void;
-// }
+interface InterServerEvents {
+  ping: () => void;
+}
 
-// interface InterServerEvents {
-//   ping: () => void;
-// }
-
-// interface SocketData {
-//   name: string;
-//   age: number;
-// }
+interface SocketData {
+  name: string;
+  age: number;
+}

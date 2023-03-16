@@ -1,6 +1,5 @@
 import { Schema,model } from 'mongoose'
 
-
 const taskProject = new Schema({
     taskName: { type: String, required: true },
     status:{type: String, required: true},
@@ -14,5 +13,5 @@ const taskProject = new Schema({
 
 const TaskProject = model('Task',taskProject)
 
-export {  taskProject }
+export {  TaskProject }
 

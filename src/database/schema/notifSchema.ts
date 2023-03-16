@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose' 
 
-const notifScema = new Schema({
+const notifSchema = new Schema({
     sender: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -21,5 +21,5 @@ const notifScema = new Schema({
 }, { timestamps: true })
 
 
-const Notif = model('Notif', notifScema);
+const Notif = model('Notif', notifSchema);
 export  { Notif }

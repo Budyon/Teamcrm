@@ -5,7 +5,7 @@ import  session  from 'express-session'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 import endpoint from './endpoints.config'
-import { auth } from './util'
+import { auth, createRole } from './util'
 import { userRouter } from './routes/userController' 
 import { companyRouter } from './routes/companyController'
 import { inviteRouter } from './routes/inviteController'
@@ -15,29 +15,38 @@ import { chatRouter } from './routes/chatController'
 import http from 'http'
 import { Server } from 'socket.io'
 import path from 'path'
-// import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from 'index'
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from 'index'
 import { Chat } from './database/schema/chatSchema'
 import { notifRouter } from './routes/notifController'
+import { rowRouter } from './routes/rowController'
+import { columnRouter } from './routes/columnController'
 
 const app  = express()
 
 const server = http.createServer(app)
 
-const io = new Server
-  // ClientToServerEvents,
-  // ServerToClientEvents,
-  // InterServerEvents,
-  // SocketData
+const io = new Server <
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>
 (server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  },
   transports: ['polling']
 })
 
 io.on('connection', async (socket:any) => {
-  
+
   const { userId } = socket.handshake.query
   const chatIds = await Chat.find({ users: { $elemMatch: { $eq: userId } } }, '_id')
   
-  chatIds.forEach((chatId:any) => {
+  chatIds.forEach((chatId) => {
     socket.join(chatId._id.toString())
   })
   socket.on('sendMessage', (props:any) => {
@@ -68,7 +77,6 @@ io.on('connection', async (socket:any) => {
   socket.on('stopTyping', () => {
     socket.broadcast.emit('stopedTyping')
   })
-
 })
 
 app.use('/uploads', express.static(path.join(__dirname,'uploads')))
@@ -91,6 +99,8 @@ app.use('/api/v1/invitations', inviteRouter)
 app.use('/api/v1/messages',auth,messageRouter)
 app.use('/api/v1/chats',auth,chatRouter)
 app.use('/api/v1/notifs',auth,notifRouter)
+app.use('/api/v1/column',auth,columnRouter)
+app.use('/api/v1/row',auth,rowRouter)
 
 app.get('/',(req,res)=> {
   res.sendFile(path.join(__dirname,'./public/index.html'))

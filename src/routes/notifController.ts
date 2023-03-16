@@ -40,13 +40,12 @@ router.post('/setreadnotif', async (req, res) => {
     }
 
 })
- router.post('AllNotifs', async (req, res) => {
+ router.post('/AllNotifs', async (req, res) => {
     try {
         const currentUserId  = req.params
         const notifs = await Notif.find({
             reciver: currentUserId
-        })
-            .populate('sender', 'firstname lastname photo email')
+        }).populate('sender', 'firstname lastname photo email')
 
         res.json(notifs)
     } catch (error) {
