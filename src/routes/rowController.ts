@@ -10,11 +10,11 @@ router.post('/',async (req,res) => {
         
         const row = await Row.create({
              title:title
-            })
+        })
 
-            row.tasks.push()
-        console.log(row)
-        
+            row.tasks.push(task)
+            row.save()
+
         res.status(200).json(row)
     } catch (error) {
         res.status(404).json({

@@ -25,9 +25,10 @@ router.get('/company/:id',async(req:Request,res:Response) => {
         const invitecompany = await inviteCompany.findById(req.params.id)
             if(invitecompany?.active === true) {
                 const company = await Company.findById(invitecompany.companyId)
-                
                 if(invitecompany?.userId){
-                    company?.users.push(invitecompany?.userId)
+                    if(!company?.users.includes(invitecompany?.userId)){
+                        company?.users.push(invitecompany?.userId)
+                    }
                 }
                 
                 await User.findByIdAndUpdate(invitecompany.userId, {
@@ -40,7 +41,7 @@ router.get('/company/:id',async(req:Request,res:Response) => {
                 invitecompany.active = false
                 await invitecompany.save()
 
-                res.json({
+                res.status(200).json({
                     Success:'You are successfully join in our company'
                 })
             }else {
@@ -89,6 +90,7 @@ router.get('/project/:id',async(req:Request,res:Response) => {
 
 router.post('/company', auth, async(req:Request,res:Response) => {
     try {
+        
         const { companyId,userId,roleName } = req.body
         const role = await Role.findOne({name:roleName})
         const roleId = role?._id
@@ -157,9 +159,6 @@ router.post('/project',  async(req:Request,res:Response) => {
         res.status(404).json(error)
     }
 })
-
-
-
  
 export { router as inviteRouter }
    

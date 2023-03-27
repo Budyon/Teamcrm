@@ -22,7 +22,6 @@ import { rowRouter } from './routes/rowController'
 import { columnRouter } from './routes/columnController'
 
 const app  = express()
-
 const server = http.createServer(app)
 
 const io = new Server <
@@ -112,6 +111,6 @@ dotenv.config()
 
 server.listen(endpoint.PORT, () => {console.log(`Application started on port ${ endpoint.PORT }`)})
 
-mongoose.connect(endpoint.MONGO_URL).then(() => console.log('connected to db..')).catch((err:any)=>{
+mongoose.connect(endpoint.MONGO_URL).then(() => console.log('connected to db..')).catch((err:any) => {
   console.log(err + 'error')
 })
