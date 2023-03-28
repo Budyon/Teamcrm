@@ -17,9 +17,9 @@ router.post('/', async ( req,res ) => {
         try {
             const message = await Message.create(newMessage)
             const chat = await Chat.findById(req.body.chatID)
-
             if(chat){
                 chat.messages = [...chat.messages, message._id]
+                
                 await chat.save()
             }
             return res.status(200).json(new messageDto(newMessage))
