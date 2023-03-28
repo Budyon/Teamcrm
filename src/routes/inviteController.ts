@@ -25,7 +25,7 @@ router.get('/company/:id',async(req:Request,res:Response) => {
         const invitecompany = await inviteCompany.findById(req.params.id)
             if(invitecompany?.active === true) {
                 const company = await Company.findById(invitecompany.companyId)
-                if(invitecompany?.userId){
+                if(invitecompany?.userId) {
                     if(!company?.users.includes(invitecompany?.userId)){
                         company?.users.push(invitecompany?.userId)
                     }
@@ -131,7 +131,7 @@ router.post('/project',  async(req:Request,res:Response) => {
     const { projectId,userId,roleId,contractDate } = req.body
     const project = await Project.findById(projectId)
     const user  = await User.findById(userId)
-    const boolean = project?.users.toString().includes(userId)
+    const boolean = project?.projectUsers.toString().includes(userId)
 
     if(contractDate > new Date && project !== null && !boolean) {
                 const invite = await inviteProject.create({
@@ -145,7 +145,7 @@ router.post('/project',  async(req:Request,res:Response) => {
                 await transporter.sendMail({
                     from: user?.email,
                     to: 'budyonevistep@gmail.com',
-                    subject: `Hello from project ${project?.name}`,
+                    subject: `Hello from project ${project?.projectName}`,
                     text: 'Invitation',
                     html: output, 
                     headers: { 'x-cloudmta-class': 'standard' }

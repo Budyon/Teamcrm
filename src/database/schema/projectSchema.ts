@@ -2,15 +2,16 @@ import { Schema, model } from 'mongoose'
 import { ColumnSchema } from './columnSchema'
 
 const ProjectSchema = new Schema({
-    name: { type: String, required: true  },
+    projectName: { type: String, required: true  },
+    managerId: {type: String, required: false},
     owner_id: { type: String, },
     companyId: { type:Schema.Types.ObjectId, },
-    logo: { type: String },
+    projectLogo: { type: String },
     description: { type: String },
-    address: { type: String },
-    webpage: { type: String },
-    phonenumber: { type: Number },
-    users: [{ type: Schema.Types.ObjectId, ref:'User' }],
+    projectAddress: { type: String },
+    projectWebpage: { type: String },
+    projectPhone: { type: Number },
+    projectUsers: [{ type: Schema.Types.ObjectId, ref:'User' }],
     columns: [ ColumnSchema ],
 })
 

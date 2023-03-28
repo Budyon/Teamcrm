@@ -4,3 +4,4 @@ src/storage/user/
 .env
 dist/
 src/public
+uploads

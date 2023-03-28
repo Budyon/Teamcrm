@@ -40,10 +40,9 @@ router.post('/',upload.single('logo'), async (req:Request,res:Response) => {
                 project:project?.id
             })
 
-            project?.users.push(
+            project?.projectUsers.push(
                 req.user?.id,
             )
-            console.log(req.user?.id)
             
             await User.findByIdAndUpdate(req.user?.id,{
                 projects:project?.id,

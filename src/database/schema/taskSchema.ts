@@ -8,7 +8,7 @@ const taskProject = new Schema({
     setPriority: { type: String, required: false },
     dueDate: { type: Schema.Types.Date, required: false },
     assignMember: { type:Schema.Types.ObjectId, required:false },
-    creator: { type:Schema.Types.ObjectId, required:false }
+    creator: { type:Schema.Types.ObjectId, required:true }
 })
 
 const TaskProject = model('Task',taskProject)
