@@ -1,25 +1,28 @@
 class projectDto {
     id
-    name
+    projectName
+    managerId
     owner_id
     description
-    address
-    webpage
-    phonenumber
-    logo
+    projectAddress
+    projectWebpage
+    projectPhone
+    projectLogo
     users
     tasks
     companyId
+    columns
 
     constructor(project: any) {
       this.id = project._id
-      this.name = project.name
+      this.projectName = project.projectName
+      this.managerId = project.managerId
       this.owner_id = project.owner_id
       this.description = project.description
-      this.address = project.address
-      this.webpage = project.webpage
-      this.phonenumber = project.phonenumber
-      this.logo = project.logo
+      this.projectAddress = project.projectAddress
+      this.projectWebpage = project.projectWebpage
+      this.projectPhone = project.projectPhone
+      this.projectLogo = project.projectLogo
       this.companyId = project.companyId
         if(project.users) {
           this.users = project.users
@@ -27,8 +30,10 @@ class projectDto {
         if(project.tasks) {
           this.tasks = project.tasks
         }
+        if(project.columns) {
+          this.columns = project.columns
+        }
     }
 }
   
   export { projectDto }
-
