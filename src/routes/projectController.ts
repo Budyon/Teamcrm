@@ -25,7 +25,7 @@ router.post('/',upload.single('logo'), async (req:Request,res:Response) => {
         const updated = req.body
             
         if (req.file && req.file.path) {
-            updated.photo = 'http://localhost:3004/uploads/' + req.file?.filename
+            updated.projectLogo = 'http://localhost:3004/uploads/' + req.file?.filename
         }
 
         if(role?.id === user?.role?.toString()) {
