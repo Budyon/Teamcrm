@@ -15,7 +15,7 @@ router.get('/:id',async (req,res)=>{
     res.status(200).json(new projectDto(project))
 })
 
-router.post('/',upload.single('logo'), async (req:Request,res:Response) => {
+router.post('/',upload.single('projectLogo'), async (req:Request,res:Response) => {
     try {
         
         const company = await Company.findById(req.params.companyId)
@@ -37,7 +37,9 @@ router.post('/',upload.single('logo'), async (req:Request,res:Response) => {
             
             company?.projects.push({
                 user_owner:req.user?.id,
-                project:project?.id
+                project:project?.id,
+                projectName:project.projectName,
+                projectLogo:project.projectLogo
             })
 
             project?.projectUsers.push(

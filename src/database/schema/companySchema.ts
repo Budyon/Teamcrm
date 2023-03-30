@@ -13,7 +13,9 @@ const CompanySchema = new Schema({
     ],
     projects:[{
         user_owner: { type: Schema.Types.ObjectId, ref:'User' },
-        project: { type: Schema.Types.ObjectId, ref:'Project' }
+        project: { type: Schema.Types.ObjectId, ref:'Project' },
+        projectName: { type:Schema.Types.String },
+        projectLogo: { type:Schema.Types.String }
     }]
 })
 
