@@ -1,8 +1,9 @@
 import { Schema, model } from 'mongoose'
 import { ColumnSchema } from './columnSchema'
+import { TaskProject } from './taskSchema'
 
 const ProjectSchema = new Schema({
-    projectName: { type: String, required: true  },
+    projectName: { type: String, required: true },
     managerId: {type: String, required: false},
     owner_id: { type: Schema.Types.ObjectId, ref:'User' },
     companyId: { type:Schema.Types.ObjectId, },
@@ -12,7 +13,8 @@ const ProjectSchema = new Schema({
     projectWebpage: { type: Schema.Types.String },
     projectPhone: { type: Schema.Types.Number },
     projectUsers: [{ type: Schema.Types.ObjectId, ref:'User' }],
-    columns: [ ColumnSchema ],
+    columns: [ { type:Schema.Types.ObjectId, ref:'Column' } ],
+    tasks:[{ type:Schema.Types.ObjectId, ref:'User'}]
 })
 
 const Project = model('Project',ProjectSchema)
