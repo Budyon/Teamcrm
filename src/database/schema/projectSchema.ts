@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { ColumnSchema } from './columnSchema'
+import { Inbox } from './inboxSchema'
 import { TaskProject } from './taskSchema'
 
 const ProjectSchema = new Schema({
@@ -13,7 +13,7 @@ const ProjectSchema = new Schema({
     projectWebpage: { type: Schema.Types.String },
     projectPhone: { type: Schema.Types.Number },
     projectUsers: [{ type: Schema.Types.ObjectId, ref:'User' }],
-    columns: [ { type:Schema.Types.ObjectId, ref:'Column' } ],
+    inboxes: [ { type:Schema.Types.ObjectId, ref:'Inbox' } ],
     tasks:[{ type:Schema.Types.ObjectId, ref:'User'}]
 })
 

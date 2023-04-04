@@ -19,7 +19,7 @@ import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDa
 import { Chat } from './database/schema/chatSchema'
 import { notifRouter } from './routes/notifController'
 import { rowRouter } from './routes/rowController'
-import { columnRouter } from './routes/columnController'
+import { inboxRouter } from './routes/inboxController'
 
 const app  = express()
 const server = http.createServer(app)
@@ -98,7 +98,7 @@ app.use('/api/v1/invitations', inviteRouter)
 app.use('/api/v1/messages',auth,messageRouter)
 app.use('/api/v1/chats',auth,chatRouter)
 app.use('/api/v1/notifs',auth,notifRouter)
-app.use('/api/v1/column',auth,columnRouter)
+app.use('/api/v1/task/column',auth,inboxRouter)
 app.use('/api/v1/row',auth,rowRouter)
 
 app.get('/',(req,res)=> {
