@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "preserveConstEnums": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "typeRoots" : ["src/types"],
+    "outDir": "./dist",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "*":[
+        "src/types/*"
+      ]
+    },
+  },
+  "files": ["src/types/index.d.ts"],
+  "include": ["src/**/*.ts", "src/dto/user/UserDto.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
