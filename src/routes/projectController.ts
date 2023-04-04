@@ -6,10 +6,11 @@ import { User } from '../database/schema/userSchema'
 import { Company } from '../database/schema/companySchema'
 import { upload } from '../util'
 import { projectDto } from '../dto/project/projectDto'
-import { Inbox } from '../database/schema/inboxSchema'
-import { TaskProject } from '../database/schema/taskSchema'
+import { inboxRouter } from './inboxController'
 
 const router  = express.Router({ mergeParams: true })
+
+router.use('/',inboxRouter)
 
 router.get('/:id',async (req,res)=>{
     const project = await Project.findById(req.params.id)
@@ -88,25 +89,6 @@ router.put('/', async (req:Request,res:Response) => {
         res.status(404).json(error)
     }
 })
-   
-router.post('/:projectId/task', async (req:Request,res:Response) => {
-    try {
-        console.log(req.params)
-        const task = await TaskProject.create(req.body)
-        const project = await Project.findById(req.params.id)
-
-        project?.tasks.push(task._id)
-        project?.inboxes.push(task._id)
-
-        await project?.save()
-        res.status(200).json({message:'task Successfully created'})
-    }
-    catch (error) {
-        console.log(error)
-    }
-})
-
-
 
 export { router as projectRouter }
    

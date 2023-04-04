@@ -5,24 +5,6 @@ const inboxSchema = new Schema({
     tasks: [ { type: Schema.Types.ObjectId, ref:'Task' } ]
 })
 
-const Inbox = model('Column', inboxSchema)
-
-const project = {
-inboxes: [
-    {
-    title : '',
-    tasks: [
-        'taskID', 'taskID'
-    ]
-},
-{
-    title : '',
-    tasks: [
-        'taskID', 'taskID'
-    ]
-}
-]
-
-}
+const Inbox = model('Inbox', inboxSchema)
 
 export { Inbox, inboxSchema }

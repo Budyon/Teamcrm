@@ -1,6 +1,4 @@
 import { Schema, model } from 'mongoose'
-import { Inbox } from './inboxSchema'
-import { TaskProject } from './taskSchema'
 
 const ProjectSchema = new Schema({
     projectName: { type: String, required: true },
